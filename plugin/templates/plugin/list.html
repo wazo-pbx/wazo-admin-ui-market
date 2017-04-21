@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+
+{% block content_header %}
+  {{ build_breadcrumb('Plugins', '', 'cubes', ['List']) }}
+{% endblock %}
+
+{% block content %}
+  <section class="content">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="nav-tabs-custom">
+          <ul class="nav nav-tabs">
+            <li class="active"><a href="#market" data-toggle="tab">Market</a></li>
+            <li><a href="#git" data-toggle="tab">Git</a></li>
+            <li><a href="#installed" data-toggle="tab">Installed</a></li>
+          </ul>
+          <div class="tab-content">
+
+            <div class="tab-pane active" id="market">
+              <div class="row">
+                {{ _render_plugin('user', 'Users', 'aqua') }}
+                {{ _render_plugin('users', 'Groups', 'aqua') }}
+                {{ _render_plugin('compress', 'Conferences', 'yellow') }}
+                {{ _render_plugin('automobile', 'Parking', 'yellow') }}
+                {{ _render_plugin('desktop', 'Switchboard', 'yellow') }}
+                {{ _render_plugin('envelope', 'Voicemail', 'yellow') }}
+                {{ _render_plugin('newspaper-o', 'CDR', 'yellow') }}
+                {{ _render_plugin('long-arrow-right', 'Incalls', 'green') }}
+                {{ _render_plugin('long-arrow-left', 'Outcalls', 'green') }}
+                {{ _render_plugin('bullhorn', 'Paging', 'yellow') }}
+                {{ _render_plugin('music', 'Moh', 'yellow') }}
+                {{ _render_plugin('server', 'Trunks', 'green') }}
+                {{ _render_plugin('gears', 'Extensions', 'red') }}
+                {{ _render_plugin('gears', 'Context', 'red') }}
+                {{ _render_plugin('navicon', 'IVR', 'yellow') }}
+                {{ _render_plugin('gear', 'Devices', 'red') }}
+              </div>
+            </div>
+
+            <div class="tab-pane" id="git">
+              <input type="text">
+            </div>
+
+            <div class="tab-pane" id="installed">
+              ...
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}
+
+{% macro _render_plugin(icon, name, color) %}
+  <div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="info-box">
+      <span class="info-box-icon bg-{{ color }}"><i class="fa fa-{{ icon }}"></i></span>
+      <div class="info-box-content">
+        <span class="info-box-text">{{ name }}</span>
+        <span class="info-box-number">-</span>
+      </div>
+    </div>
+  </div>
+{% endmacro %}

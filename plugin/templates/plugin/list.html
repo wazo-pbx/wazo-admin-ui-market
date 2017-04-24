@@ -33,11 +33,21 @@
           <ul class="nav nav-tabs">
             <li class="active"><a href="#market" data-toggle="tab">Market</a></li>
             <li><a href="#git" data-toggle="tab">Git</a></li>
-            <li><a href="#installed" data-toggle="tab">Installed</a></li>
           </ul>
           <div class="tab-content">
 
             <div class="tab-pane active" id="market">
+              <div class="row">
+                <div class="col-md-2 pull-right">
+                  <div class="form-group">
+                    <select class="form-control">
+                      <option>All</option>
+                      <option>Installed</option>
+                      <option>Not installed</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
               <div class="row">
                 {% for m in market %}
                   {{ _render_plugin(m[0], m[1], m[2], m[3], m[4], m[5], m[6], m[7]) }}
@@ -46,11 +56,20 @@
             </div>
 
             <div class="tab-pane" id="git">
-              <input type="text">
-            </div>
-
-            <div class="tab-pane" id="installed">
-              ...
+              <div class="row">
+                <div class="col-md-4">
+                  <h4>Give your GIT url to install a plugin!</h4>
+                  <div class="input-group">
+                    <span class="input-group-addon">
+                      <i class="fa fa-download"></i>
+                    </span>
+                    <input class="form-control" placeholder="GIT url..." type="text">
+                      <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary btn-flat">Install</button>
+                      </span>
+                  </div>
+                </div>
+              </div>
             </div>
 
           </div>

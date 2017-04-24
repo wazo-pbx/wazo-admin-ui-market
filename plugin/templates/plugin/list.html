@@ -18,22 +18,22 @@
 
             <div class="tab-pane active" id="market">
               <div class="row">
-                {{ _render_plugin('user', 'Users', 'aqua') }}
-                {{ _render_plugin('users', 'Groups', 'aqua') }}
-                {{ _render_plugin('compress', 'Conferences', 'yellow') }}
-                {{ _render_plugin('automobile', 'Parking', 'yellow') }}
-                {{ _render_plugin('desktop', 'Switchboard', 'yellow') }}
-                {{ _render_plugin('envelope', 'Voicemail', 'yellow') }}
-                {{ _render_plugin('newspaper-o', 'CDR', 'yellow') }}
-                {{ _render_plugin('long-arrow-right', 'Incalls', 'green') }}
-                {{ _render_plugin('long-arrow-left', 'Outcalls', 'green') }}
-                {{ _render_plugin('bullhorn', 'Paging', 'yellow') }}
-                {{ _render_plugin('music', 'Moh', 'yellow') }}
-                {{ _render_plugin('server', 'Trunks', 'green') }}
-                {{ _render_plugin('gears', 'Extensions', 'red') }}
-                {{ _render_plugin('gears', 'Context', 'red') }}
-                {{ _render_plugin('navicon', 'IVR', 'yellow') }}
-                {{ _render_plugin('gear', 'Devices', 'red') }}
+                {{ _render_plugin('user', 'Users', 'aqua', ['beta', 'users']) }}
+                {{ _render_plugin('users', 'Groups', 'aqua', ['beta', 'users']) }}
+                {{ _render_plugin('compress', 'Conferences', 'yellow', ['beta', 'application']) }}
+                {{ _render_plugin('automobile', 'Parking', 'yellow', ['beta', 'application']) }}
+                {{ _render_plugin('desktop', 'Switchboard', 'yellow', ['beta', 'application']) }}
+                {{ _render_plugin('envelope', 'Voicemail', 'yellow', ['beta', 'application']) }}
+                {{ _render_plugin('newspaper-o', 'CDR', 'yellow', ['beta', 'application']) }}
+                {{ _render_plugin('long-arrow-right', 'Incalls', 'green', ['beta', 'routing']) }}
+                {{ _render_plugin('long-arrow-left', 'Outcalls', 'green', ['beta', 'routing']) }}
+                {{ _render_plugin('bullhorn', 'Paging', 'yellow', ['beta', 'application']) }}
+                {{ _render_plugin('music', 'Moh', 'yellow', ['beta', 'application']) }}
+                {{ _render_plugin('server', 'Trunks', 'green', ['beta', 'routing']) }}
+                {{ _render_plugin('gears', 'Extensions', 'red', ['beta', 'internal']) }}
+                {{ _render_plugin('gears', 'Context', 'red', ['beta', 'internal']) }}
+                {{ _render_plugin('navicon', 'IVR', 'yellow', ['beta', 'application']) }}
+                {{ _render_plugin('gear', 'Devices', 'red', ['beta', 'internal']) }}
               </div>
             </div>
 
@@ -52,14 +52,24 @@
   </section>
 {% endblock %}
 
-{% macro _render_plugin(icon, name, color) %}
+{% macro _render_plugin(icon, name, color, labels) %}
   <div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="info-box">
-      <span class="info-box-icon bg-{{ color }}"><i class="fa fa-{{ icon }}"></i></span>
-      <div class="info-box-content">
-        <span class="info-box-text">{{ name }}</span>
-        <span class="info-box-number">-</span>
+    <div class="small-box bg-{{ color }}">
+      <div class="inner">
+        <h3>{{ name }}</h3>
+        <p>By Wazo Team</p>
+        {% for label in labels %}
+          <span class="">
+            <small class="label label-default">{{ label }}</small>
+          </span>
+        {% endfor %}
       </div>
+      <div class="icon">
+        <i class="fa fa-{{ icon }}"></i>
+      </div>
+      <a href="#" class="small-box-footer">
+        More info <i class="fa fa-arrow-circle-right"></i>
+      </a>
     </div>
   </div>
 {% endmacro %}

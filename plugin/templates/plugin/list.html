@@ -7,7 +7,7 @@
 {% block content %}
 
   {% set market = [
-    ('user', 'Users', 'aqua', ['beta', 'users', 'tag1', 'tag2', 'tag3']),
+    ('user', 'Users', 'aqua', ['beta', 'users', 'tag1', 'tag2'], False, True),
     ('users', 'Groups', 'aqua', ['beta', 'users']),
     ('compress', 'Conferences', 'yellow', ['beta', 'application'], True),
     ('automobile', 'Parking', 'yellow', ['beta', 'application']),
@@ -40,7 +40,7 @@
             <div class="tab-pane active" id="market">
               <div class="row">
                 {% for m in market %}
-                  {{ _render_plugin(m[0], m[1], m[2], m[3], m[4]) }}
+                  {{ _render_plugin(m[0], m[1], m[2], m[3], m[4], m[5]) }}
                 {% endfor %}
               </div>
             </div>
@@ -60,20 +60,29 @@
   </section>
 {% endblock %}
 
-{% macro _render_plugin(icon, name, color, labels, loading) %}
+{% macro _render_plugin(icon, name, color, labels, loading, is_installed) %}
   <div class="col-md-3 col-sm-6 col-xs-12">
     <div class="small-box bg-{{ color }} box box-solid">
       <div class="inner">
         <h3>{{ name }}</h3>
         <p>By Wazo Team</p>
         {% for label in labels %}
-          <span class="">
-            <small class="label label-default">{{ label }}</small>
+          <span>
+            <small class="label label-default">
+              <i class="fa fa-tag"></i>
+              {{ label }}
+            </small>
+            &nbsp;
           </span>
         {% endfor %}
         <button type="button" class="btn btn-default btn-xs margin label">
+        {% if is_installed %}
+          Remove
+          <i class="fa fa-trash"></i>
+        {% else %}
           Install
           <i class="fa fa-download"></i>
+        {% endif %}
         </button>
       </div>
       <div class="icon">

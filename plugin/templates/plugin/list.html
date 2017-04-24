@@ -7,7 +7,7 @@
 {% block content %}
 
   {% set market = [
-    ('user', 'Users', 'aqua', ['beta', 'users', 'tag1', 'tag2'], False, True),
+    ('user', 'Users', 'aqua', ['beta', 'users', 'tag1', 'tag2'], False, True, 'https://github.com/wazo-pbx/wazo-admin-ui-user', 'François Blackburn'),
     ('users', 'Groups', 'aqua', ['beta', 'users']),
     ('compress', 'Conferences', 'yellow', ['beta', 'application'], True),
     ('automobile', 'Parking', 'yellow', ['beta', 'application']),
@@ -40,7 +40,7 @@
             <div class="tab-pane active" id="market">
               <div class="row">
                 {% for m in market %}
-                  {{ _render_plugin(m[0], m[1], m[2], m[3], m[4], m[5]) }}
+                  {{ _render_plugin(m[0], m[1], m[2], m[3], m[4], m[5], m[6], m[7]) }}
                 {% endfor %}
               </div>
             </div>
@@ -60,12 +60,12 @@
   </section>
 {% endblock %}
 
-{% macro _render_plugin(icon, name, color, labels, loading, is_installed) %}
+{% macro _render_plugin(icon, name, color, labels, loading, is_installed, url, author) %}
   <div class="col-md-3 col-sm-6 col-xs-12">
     <div class="small-box bg-{{ color }} box box-solid">
       <div class="inner">
         <h3>{{ name }}</h3>
-        <p>By Wazo Team</p>
+        <p>By {{ author or 'Wazo Team' }}</p>
         {% for label in labels %}
           <span>
             <small class="label label-default">
@@ -88,7 +88,7 @@
       <div class="icon">
         <i class="fa fa-{{ icon }}"></i>
       </div>
-      <a href="#" class="small-box-footer">
+      <a href="{{ url or '#' }}" class="small-box-footer">
         More info <i class="fa fa-arrow-circle-right"></i>
       </a>
       {% if loading %}

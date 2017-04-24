@@ -5,6 +5,27 @@
 {% endblock %}
 
 {% block content %}
+
+  {% set market = [
+    ('user', 'Users', 'aqua', ['beta', 'users', 'tag1', 'tag2', 'tag3']),
+    ('users', 'Groups', 'aqua', ['beta', 'users']),
+    ('compress', 'Conferences', 'yellow', ['beta', 'application']),
+    ('automobile', 'Parking', 'yellow', ['beta', 'application']),
+    ('desktop', 'Switchboard', 'yellow', ['beta', 'application']),
+    ('envelope', 'Voicemail', 'yellow', ['beta', 'application']),
+    ('newspaper-o', 'CDR', 'yellow', ['beta', 'application']),
+    ('long-arrow-right', 'Incalls', 'green', ['beta', 'routing']),
+    ('long-arrow-left', 'Outcalls', 'green', ['beta', 'routing']),
+    ('bullhorn', 'Paging', 'yellow', ['beta', 'application']),
+    ('music', 'Moh', 'yellow', ['beta', 'application']),
+    ('server', 'Trunks', 'green', ['beta', 'routing']),
+    ('gears', 'Extensions', 'red', ['beta', 'internal']),
+    ('gears', 'Context', 'red', ['beta', 'internal']),
+    ('navicon', 'IVR', 'yellow', ['beta', 'application']),
+    ('gear', 'Devices', 'red', ['beta', 'internal']),
+    ]
+  %}
+
   <section class="content">
     <div class="row">
       <div class="col-md-12">
@@ -18,22 +39,9 @@
 
             <div class="tab-pane active" id="market">
               <div class="row">
-                {{ _render_plugin('user', 'Users', 'aqua', ['beta', 'users']) }}
-                {{ _render_plugin('users', 'Groups', 'aqua', ['beta', 'users']) }}
-                {{ _render_plugin('compress', 'Conferences', 'yellow', ['beta', 'application']) }}
-                {{ _render_plugin('automobile', 'Parking', 'yellow', ['beta', 'application']) }}
-                {{ _render_plugin('desktop', 'Switchboard', 'yellow', ['beta', 'application']) }}
-                {{ _render_plugin('envelope', 'Voicemail', 'yellow', ['beta', 'application']) }}
-                {{ _render_plugin('newspaper-o', 'CDR', 'yellow', ['beta', 'application']) }}
-                {{ _render_plugin('long-arrow-right', 'Incalls', 'green', ['beta', 'routing']) }}
-                {{ _render_plugin('long-arrow-left', 'Outcalls', 'green', ['beta', 'routing']) }}
-                {{ _render_plugin('bullhorn', 'Paging', 'yellow', ['beta', 'application']) }}
-                {{ _render_plugin('music', 'Moh', 'yellow', ['beta', 'application']) }}
-                {{ _render_plugin('server', 'Trunks', 'green', ['beta', 'routing']) }}
-                {{ _render_plugin('gears', 'Extensions', 'red', ['beta', 'internal']) }}
-                {{ _render_plugin('gears', 'Context', 'red', ['beta', 'internal']) }}
-                {{ _render_plugin('navicon', 'IVR', 'yellow', ['beta', 'application']) }}
-                {{ _render_plugin('gear', 'Devices', 'red', ['beta', 'internal']) }}
+                {% for m in market %}
+                  {{ _render_plugin(m[0], m[1], m[2], m[3]) }}
+                {% endfor %}
               </div>
             </div>
 
@@ -63,6 +71,10 @@
             <small class="label label-default">{{ label }}</small>
           </span>
         {% endfor %}
+        <button type="button" class="btn btn-default btn-xs margin label">
+          Install
+          <i class="fa fa-download"></i>
+        </button>
       </div>
       <div class="icon">
         <i class="fa fa-{{ icon }}"></i>

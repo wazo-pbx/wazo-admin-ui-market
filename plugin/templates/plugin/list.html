@@ -9,7 +9,7 @@
   {% set market = [
     ('user', 'Users', 'aqua', ['beta', 'users', 'tag1', 'tag2', 'tag3']),
     ('users', 'Groups', 'aqua', ['beta', 'users']),
-    ('compress', 'Conferences', 'yellow', ['beta', 'application']),
+    ('compress', 'Conferences', 'yellow', ['beta', 'application'], True),
     ('automobile', 'Parking', 'yellow', ['beta', 'application']),
     ('desktop', 'Switchboard', 'yellow', ['beta', 'application']),
     ('envelope', 'Voicemail', 'yellow', ['beta', 'application']),
@@ -40,7 +40,7 @@
             <div class="tab-pane active" id="market">
               <div class="row">
                 {% for m in market %}
-                  {{ _render_plugin(m[0], m[1], m[2], m[3]) }}
+                  {{ _render_plugin(m[0], m[1], m[2], m[3], m[4]) }}
                 {% endfor %}
               </div>
             </div>
@@ -60,9 +60,9 @@
   </section>
 {% endblock %}
 
-{% macro _render_plugin(icon, name, color, labels) %}
+{% macro _render_plugin(icon, name, color, labels, loading) %}
   <div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="small-box bg-{{ color }}">
+    <div class="small-box bg-{{ color }} box box-solid">
       <div class="inner">
         <h3>{{ name }}</h3>
         <p>By Wazo Team</p>
@@ -82,6 +82,11 @@
       <a href="#" class="small-box-footer">
         More info <i class="fa fa-arrow-circle-right"></i>
       </a>
+      {% if loading %}
+        <div class="overlay">
+          <i class="fa fa-refresh fa-spin"></i>
+        </div>
+      {% endif %}
     </div>
   </div>
 {% endmacro %}

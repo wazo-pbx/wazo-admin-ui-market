@@ -12,12 +12,13 @@ $(document).on('click', "[data-installed]", function() {
 
 function remove_plugin(name) {
   res = confirm('Are you sure you want to remove this plugin?');
-  console.log(res);
+  if (res == true) {
+    launch_remove_plugin(name);
+  }
 }
 
 function install_plugin(name, url) {
   res = confirm('Are you sure you want to install this plugin?');
-  console.log(res);
   if (res == true) {
     launch_install_plugin(name, url);
   }
@@ -28,4 +29,11 @@ function launch_install_plugin(name, url) {
   setTimeout(function() {
     $('#' + name).addClass('hidden');
   }, 5000);
+}
+
+function launch_remove_plugin(name) {
+  $('#' + name).removeClass('hidden');
+  setTimeout(function() {
+    $('#' + name).addClass('hidden');
+  }, 3000);
 }

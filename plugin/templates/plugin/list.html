@@ -87,30 +87,14 @@
   </section>
 {% endblock %}
 
-{% macro _render_plugin(icon, name, color, labels, loading, is_installed, url, author) %}
+{% macro _render_plugin(icon, name, color, tags, loading, is_installed, url, author) %}
   <div class="col-md-3 col-sm-6 col-xs-12">
     <div class="small-box bg-{{ color }} box box-solid">
       <div class="inner">
         <h3>{{ name }}</h3>
         <p>By {{ author or 'Wazo Team' }}</p>
-        {% for label in labels %}
-          <span>
-            <small class="label label-default">
-              <i class="fa fa-tag"></i>
-              {{ label }}
-            </small>
-            &nbsp;
-          </span>
-        {% endfor %}
-        <button type="button" class="btn btn-default btn-xs margin label">
-        {% if is_installed %}
-          Remove
-          <i class="fa fa-trash"></i>
-        {% else %}
-          Install
-          <i class="fa fa-download"></i>
-        {% endif %}
-        </button>
+        {{ _render_tags(tags) }}
+        {{ _render_button(is_installed|default(False), name, url|default(name)) }}
       </div>
       <div class="icon">
         <i class="fa fa-{{ icon }}"></i>
@@ -118,11 +102,37 @@
       <a href="{{ url or '#' }}" class="small-box-footer" target="_blank">
         More info <i class="fa fa-arrow-circle-right"></i>
       </a>
-      {% if loading %}
-        <div class="overlay">
-          <i class="fa fa-refresh fa-spin"></i>
-        </div>
-      {% endif %}
+      <div class="overlay {% if not loading %}hidden{% endif %}" id="{{ name }}">
+        <i class="fa fa-refresh fa-spin"></i>
+      </div>
     </div>
   </div>
 {% endmacro %}
+
+{% macro _render_tags(tags) %}
+  {% for tag in tags %}
+    <span>
+      <small class="label label-default">
+        <i class="fa fa-tag"></i>
+        {{ tag }}
+      </small>
+      &nbsp;
+    </span>
+  {% endfor %}
+{% endmacro %}
+
+{% macro _render_button(is_installed, name, url) %}
+  <button type="button" class="btn btn-default btn-xs margin label" data-installed="{{ is_installed }}" data-name="{{ name }}" data-url="{{ url }}">
+  {% if is_installed %}
+    Remove
+    <i class="fa fa-trash"></i>
+  {% else %}
+    Install
+    <i class="fa fa-download"></i>
+  {% endif %}
+  </button>
+{% endmacro %}
+
+{% block additional_js %}
+  <script src="{{ url_for('.static', filename='js/plugin.js') }}"></script>
+{% endblock %}

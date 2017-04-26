@@ -110,9 +110,9 @@
     data-namespace="{{ namespace }}"
     data-method="git"
     {% if not is_installed %}
-    data-install-url="{{ url_for('plugin.PluginView:install_plugin') }}"
+      data-install-url="{{ url_for('plugin.PluginView:install_plugin') }}"
     {% else %}
-    data-remove-url="{{ url_for('plugin.PluginView:remove_plugin') }}"
+      data-remove-url="{{ url_for('plugin.PluginView:remove_plugin') }}"
     {% endif %}
   >
   {% if is_installed %}

@@ -19,7 +19,8 @@
               <div class="row">
                 <div class="col-md-2 pull-right">
                   <div class="input-group">
-                    <input class="form-control" placeholder="Search plugin" type="text">
+                    <input class="form-control" placeholder="Search plugin" type="text" id="search_plugin"
+                      data-search-url="{{ url_for('plugin.PluginView:search_plugin') }}">
                     <span class="input-group-addon">
                       <i class="fa fa-search"></i>
                     </span>
@@ -27,10 +28,11 @@
                 </div>
                 <div class="col-md-2 pull-right">
                   <div class="form-group">
-                    <select class="form-control">
-                      <option>All</option>
-                      <option>Installed</option>
-                      <option>Not installed</option>
+                    <select class="form-control" id="filter_plugin"
+                      data-filter-url="{{ url_for('plugin.PluginView:filter_plugin') }}">
+                      <option value="all">All</option>
+                      <option value="installed">Installed</option>
+                      <option value="not_installed">Not installed</option>
                     </select>
                   </div>
                 </div>
@@ -107,7 +109,11 @@
     data-url="{{ url }}"
     data-namespace="{{ namespace }}"
     data-method="git"
+    {% if not is_installed %}
     data-install-url="{{ url_for('plugin.PluginView:install_plugin') }}"
+    {% else %}
+    data-remove-url="{{ url_for('plugin.PluginView:remove_plugin') }}"
+    {% endif %}
   >
   {% if is_installed %}
     Remove

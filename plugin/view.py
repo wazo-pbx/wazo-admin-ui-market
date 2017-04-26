@@ -24,3 +24,18 @@ class PluginView(BaseView):
     def install_plugin(self):
         body = request.get_json()
         return jsonify(body)
+
+    @route('/remove_plugin/', methods=['POST'])
+    def remove_plugin(self):
+        body = request.get_json()
+        return jsonify(body)
+
+    @route('/search_plugin/', methods=['POST'])
+    def search_plugin(self):
+        body = request.get_json()
+        return jsonify(body)
+
+    @route('/filter_plugin/', methods=['POST'])
+    def filter_plugin(self):
+        body = request.get_json()
+        return jsonify(body)

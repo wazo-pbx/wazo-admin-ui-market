@@ -29,7 +29,7 @@ $('#search_plugin').on('change', function() {
       search = {
         value: res
       }
-      call_ajax_plugin(search_url, search, callback_search);
+      call_ajax_plugin(search_url, callback_search, search);
     }
 });
 
@@ -41,7 +41,7 @@ $('#filter_plugin').on('change', function() {
       filter = {
         value: res
       }
-      call_ajax_plugin(filter_url, filter, callback_filter);
+      call_ajax_plugin(filter_url, callback_filter, filter);
     }
 });
 
@@ -61,12 +61,12 @@ function install_plugin(install_url, body) {
 
 function launch_install_plugin(install_url, body) {
   $('#' + body.name).removeClass('hidden');
-  call_ajax_plugin(install_url, body, callback_install);
+  call_ajax_plugin(install_url, callback_install, body);
 }
 
 function launch_remove_plugin(remove_url, body) {
   $('#' + body.name).removeClass('hidden');
-  call_ajax_plugin(remove_url, body, callback_remove);
+  call_ajax_plugin(remove_url, callback_remove, body);
 }
 
 function callback_install(data) {
@@ -80,19 +80,25 @@ function callback_remove(data) {
 }
 
 function callback_search(data) {
-  console.log(data);
+  $('#plugins').html(data);
 }
 
 function callback_filter(data) {
-  console.log(data);
+  $('#plugins').html(data);
 }
 
-function call_ajax_plugin(url, body, callback) {
+function callback_list(data) {
+  $('#plugins').html(data);
+}
+
+function call_ajax_plugin(url, callback, body, method) {
+  if (!method) { method = 'POST'; }
+  if (body == '') { data = null; } else { data = JSON.stringify(body); }
   $.ajax({
     url: url,
-    type: 'POST',
+    type: method,
     contentType: 'application/json',
-    data: JSON.stringify(body),
+    data: data,
     success: function(data) {
       callback(data);
     }

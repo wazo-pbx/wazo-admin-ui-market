@@ -1,0 +1,62 @@
+{% macro _render_plugin(entry) %}
+  <div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="small-box bg-{{ entry.color }} box box-solid">
+      <div class="inner">
+        <h3>{{ entry.name }}</h3>
+        <p>By {{ entry.author }}</p>
+        {{ _render_tags(entry.tags) }}
+        {{ _render_button(entry.is_installed|default(False), entry.plugin_name, entry.url, entry.namespace|default('wazo-official'), entry.method|default('git')) }}
+      </div>
+      <div class="icon">
+        <i class="fa fa-{{ entry.icon }}"></i>
+      </div>
+      <a href="{{ entry.url or '#' }}" class="small-box-footer" target="_blank">
+        More info <i class="fa fa-arrow-circle-right"></i>
+      </a>
+      <div class="overlay {% if not entry.on_installation %}hidden{% endif %}" id="{{ entry.plugin_name }}">
+        <i class="fa fa-refresh fa-spin"></i>
+      </div>
+    </div>
+  </div>
+{% endmacro %}
+
+{% macro _render_tags(tags) %}
+  {% for tag in tags %}
+    <span>
+      <small class="label label-default">
+        <i class="fa fa-tag"></i>
+        {{ tag }}
+      </small>
+      &nbsp;
+    </span>
+  {% endfor %}
+{% endmacro %}
+
+{% macro _render_button(is_installed, plugin_name, url, namespace, method) %}
+  <button type="button" class="btn btn-default btn-xs margin label"
+    data-installed="{{ is_installed }}"
+    data-name="{{ plugin_name }}"
+    data-url="{{ url }}"
+    data-namespace="{{ namespace }}"
+    data-method="git"
+    {% if not is_installed %}
+      data-install-url="{{ url_for('plugin.PluginView:install_plugin') }}"
+    {% else %}
+      data-remove-url="{{ url_for('plugin.PluginView:remove_plugin') }}"
+    {% endif %}
+  >
+  {% if is_installed %}
+    Remove
+    <i class="fa fa-trash"></i>
+  {% else %}
+    Install
+    <i class="fa fa-download"></i>
+  {% endif %}
+  </button>
+{% endmacro %}
+
+<div class="row">
+  {% for entry in market %}
+    {{ _render_plugin(entry) }}
+  {% endfor %}
+</div>

@@ -1,8 +1,8 @@
 
-MARKETS = []
+MARKETS = {}
 
 _markets = [
-    ('user', 'Users', 'aqua', ['beta', 'users', 'tag1', 'tag2'], False, True, 'https://github.com/wazo-pbx/wazo-admin-ui-user', 'wazo-admin-ui-user', u'François Blackburn'),
+    ('user', 'Users', 'aqua', ['beta', 'users', 'tag1', 'tag2'], False, True, 'https://github.com/wazo-pbx/wazo-admin-ui-user', 'wazo-admin-ui-user', 'Francois Blackburn'),
     ('users', 'Groups', 'aqua', ['beta', 'users'], False, False, 'https://github.com/wazo-pbx/wazo-admin-ui-group', 'wazo-admin-ui-group', 'Sylvain Boily'),
     ('compress', 'Conferences', 'yellow', ['beta', 'application'], True, False, 'https://github.com/wazo-pbx/wazo-admin-ui-conference', 'wazo-admin-ui-conference', 'Wazo Team'),
     ('automobile', 'Parking', 'yellow', ['beta', 'application'], False, False, 'https://github.com/wazo-pbx/wazo-admin-ui-parking-lot', 'wazo-admin-ui-parking-lot', 'Wazo Team'),
@@ -20,15 +20,18 @@ _markets = [
     ('gear', 'Devices', 'red', ['beta', 'internal'], False, False, 'https://github.com/wazo-pbx/wazo-admin-ui-device', 'wazo-admin-ui-device', 'Wazo Team'),
 ]
 
+market_entry = []
 for entry in _markets:
-  MARKETS.append(
-    {'icon': entry[0],
-     'name': entry[1],
-     'color': entry[2],
-     'tags': entry[3],
-     'on_installation': entry[4],
-     'is_installed': entry[5],
-     'url': entry[6],
-     'plugin_name': entry[7],
-     'author': entry[8]}
-  )
+  market_entry.append({
+      'icon': entry[0],
+      'name': entry[1],
+      'color': entry[2],
+      'tags': entry[3],
+      'on_installation': entry[4],
+      'is_installed': entry[5],
+      'url': entry[6],
+      'plugin_name': entry[7],
+      'author': entry[8]
+  })
+
+MARKETS.update({'items': market_entry})

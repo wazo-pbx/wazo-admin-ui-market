@@ -5,27 +5,6 @@
 {% endblock %}
 
 {% block content %}
-
-  {% set market = [
-    ('user', 'Users', 'aqua', ['beta', 'users', 'tag1', 'tag2'], False, True, 'https://github.com/wazo-pbx/wazo-admin-ui-user', 'François Blackburn'),
-    ('users', 'Groups', 'aqua', ['beta', 'users'], False, False, 'https://github.com/wazo-pbx/wazo-admin-ui-group', 'Sylvain Boily'),
-    ('compress', 'Conferences', 'yellow', ['beta', 'application'], True, False, 'https://github.com/wazo-pbx/wazo-admin-ui-conference'),
-    ('automobile', 'Parking', 'yellow', ['beta', 'application'], False, False, 'https://github.com/wazo-pbx/wazo-admin-ui-parking-lot'),
-    ('desktop', 'Switchboard', 'yellow', ['beta', 'application'], False, False, 'https://github.com/wazo-pbx/wazo-admin-ui-switchboard'),
-    ('envelope', 'Voicemail', 'yellow', ['beta', 'application'], False, False, 'https://github.com/wazo-pbx/wazo-admin-ui-voicemail'),
-    ('newspaper-o', 'CDR', 'yellow', ['beta', 'application'], False, False, 'https://github.com/wazo-pbx/wazo-admin-ui-cdr'),
-    ('long-arrow-right', 'Incalls', 'green', ['beta', 'routing'], False, False, 'https://github.com/wazo-pbx/wazo-admin-ui-incall'),
-    ('long-arrow-left', 'Outcalls', 'green', ['beta', 'routing'], False, False, 'https://github.com/wazo-pbx/wazo-admin-ui-outcall'),
-    ('bullhorn', 'Paging', 'yellow', ['beta', 'application'], False, False, 'https://github.com/wazo-pbx/wazo-admin-ui-paging'),
-    ('music', 'Moh', 'yellow', ['beta', 'application'], False, False, 'https://github.com/wazo-pbx/wazo-admin-ui-moh'),
-    ('server', 'Trunks', 'green', ['beta', 'routing'], False, False, 'https://github.com/wazo-pbx/wazo-admin-ui-trunk'),
-    ('gears', 'Extensions', 'red', ['beta', 'internal'], False, False, 'https://github.com/wazo-pbx/wazo-admin-ui-extension'),
-    ('gears', 'Context', 'red', ['beta', 'internal'], False, False, 'https://github.com/wazo-pbx/wazo-admin-ui-context'),
-    ('navicon', 'IVR', 'yellow', ['beta', 'application'], False, False, 'https://github.com/wazo-pbx/wazo-admin-ui-ivr'),
-    ('gear', 'Devices', 'red', ['beta', 'internal'], False, False, 'https://github.com/wazo-pbx/wazo-admin-ui-device'),
-    ]
-  %}
-
   <section class="content">
     <div class="row">
       <div class="col-md-12">
@@ -57,8 +36,8 @@
                 </div>
               </div>
               <div class="row">
-                {% for m in market %}
-                  {{ _render_plugin(m[0], m[1], m[2], m[3], m[4], m[5], m[6], m[7]) }}
+                {% for entry in market %}
+                  {{ _render_plugin(entry) }}
                 {% endfor %}
               </div>
             </div>
@@ -87,22 +66,22 @@
   </section>
 {% endblock %}
 
-{% macro _render_plugin(icon, name, color, tags, loading, is_installed, url, author) %}
+{% macro _render_plugin(entry) %}
   <div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="small-box bg-{{ color }} box box-solid">
+    <div class="small-box bg-{{ entry.color }} box box-solid">
       <div class="inner">
-        <h3>{{ name }}</h3>
-        <p>By {{ author or 'Wazo Team' }}</p>
-        {{ _render_tags(tags) }}
-        {{ _render_button(is_installed|default(False), name, url|default(name)) }}
+        <h3>{{ entry.name }}</h3>
+        <p>By {{ entry.author }}</p>
+        {{ _render_tags(entry.tags) }}
+        {{ _render_button(entry.is_installed|default(False), entry.plugin_name, entry.url, entry.namespace|default('wazo-official'), entry.method|default('git')) }}
       </div>
       <div class="icon">
-        <i class="fa fa-{{ icon }}"></i>
+        <i class="fa fa-{{ entry.icon }}"></i>
       </div>
-      <a href="{{ url or '#' }}" class="small-box-footer" target="_blank">
+      <a href="{{ entry.url or '#' }}" class="small-box-footer" target="_blank">
         More info <i class="fa fa-arrow-circle-right"></i>
       </a>
-      <div class="overlay {% if not loading %}hidden{% endif %}" id="{{ name }}">
+      <div class="overlay {% if not entry.on_installation %}hidden{% endif %}" id="{{ entry.plugin_name }}">
         <i class="fa fa-refresh fa-spin"></i>
       </div>
     </div>
@@ -121,8 +100,15 @@
   {% endfor %}
 {% endmacro %}
 
-{% macro _render_button(is_installed, name, url) %}
-  <button type="button" class="btn btn-default btn-xs margin label" data-installed="{{ is_installed }}" data-name="{{ name }}" data-url="{{ url }}">
+{% macro _render_button(is_installed, plugin_name, url, namespace, method) %}
+  <button type="button" class="btn btn-default btn-xs margin label"
+    data-installed="{{ is_installed }}"
+    data-name="{{ plugin_name }}"
+    data-url="{{ url }}"
+    data-namespace="{{ namespace }}"
+    data-method="git"
+    data-install-url="{{ url_for('plugin.PluginView:install_plugin') }}"
+  >
   {% if is_installed %}
     Remove
     <i class="fa fa-trash"></i>

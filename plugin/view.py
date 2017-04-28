@@ -27,7 +27,8 @@ class PluginView(BaseView):
     @route('/install_plugin/', methods=['POST'])
     def install_plugin(self):
         body = request.get_json()
-        return jsonify(body)
+        plugin = self.service.install_plugin(body)
+        return jsonify(plugin)
 
     @route('/remove_plugin/', methods=['POST'])
     def remove_plugin(self):

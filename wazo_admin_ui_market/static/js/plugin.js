@@ -1,3 +1,62 @@
+var socket = null;
+var started = false;
+
+function connect(token) {
+    if (socket != null) {
+        console.log("socket already connected");
+        return;
+    }
+
+    currentLocation = window.location;
+    host = currentLocation.host;
+    if (currentLocation.port) {
+        host = host + ":" + currentLocation.port;
+    }
+    ws_url = "wss://" + host + "/api/websocketd/?token=" + token;
+
+    socket = new WebSocket(ws_url);
+    socket.onclose = function(event) {
+        socket = null;
+        console.log("websocketd closed with code " + event.code + " and reason '" + event.reason + "'");
+    };
+    socket.onmessage = function(event) {
+        if (started) {
+            console.log("message received: " + event.data);
+            return;
+        }
+
+        var msg = JSON.parse(event.data);
+        switch (msg.op) {
+            case "init":
+                subscribe("*");
+                start();
+                break;
+            case "start":
+                started = true;
+                console.log("waiting for messages");
+                break;
+        }
+    };
+    started = false;
+}
+
+function subscribe(event_name) {
+    var msg = {
+        op: "subscribe",
+        data: {
+          event_name: event_name
+        }
+    };
+    socket.send(JSON.stringify(msg));
+};
+
+function start() {
+    var msg = {
+        op: "start"
+    };
+    socket.send(JSON.stringify(msg));
+}
+
 $(document).on('click', "[data-installed]", function() {
     is_installed = $(this).attr("data-installed");
     name = $(this).attr("data-name");

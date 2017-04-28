@@ -2,9 +2,9 @@
 MARKETS = {}
 
 _markets = [
-    ('user', 'Users', 'aqua', ['beta', 'users', 'tag1', 'tag2'], False, True, 'https://github.com/wazo-pbx/wazo-admin-ui-user', 'wazo-admin-ui-user', 'Francois Blackburn'),
+    ('user', 'Users', 'aqua', ['beta', 'users', 'tag1', 'tag2'], False, False, 'https://github.com/wazo-pbx/wazo-admin-ui-user', 'wazo-admin-ui-user', 'Francois Blackburn'),
     ('users', 'Groups', 'aqua', ['beta', 'users'], False, False, 'https://github.com/wazo-pbx/wazo-admin-ui-group', 'wazo-admin-ui-group', 'Sylvain Boily'),
-    ('compress', 'Conferences', 'yellow', ['beta', 'application'], True, False, 'https://github.com/wazo-pbx/wazo-admin-ui-conference', 'wazo-admin-ui-conference', 'Wazo Team'),
+    ('compress', 'Conferences', 'yellow', ['beta', 'application'], False, False, 'https://github.com/wazo-pbx/wazo-admin-ui-conference', 'wazo-admin-ui-conference', 'Wazo Team'),
     ('automobile', 'Parking', 'yellow', ['beta', 'application'], False, False, 'https://github.com/wazo-pbx/wazo-admin-ui-parking-lot', 'wazo-admin-ui-parking-lot', 'Wazo Team'),
     ('desktop', 'Switchboard', 'yellow', ['beta', 'application'], False, False, 'https://github.com/wazo-pbx/wazo-admin-ui-switchboard', 'wazo-admin-ui-switchboard', 'Wazo Team'),
     ('envelope', 'Voicemail', 'yellow', ['beta', 'application'], False, False, 'https://github.com/wazo-pbx/wazo-admin-ui-voicemail', 'wazo-admin-ui-voicemail', 'Wazo Team'),

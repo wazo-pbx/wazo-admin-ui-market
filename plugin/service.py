@@ -4,9 +4,13 @@
 
 import logging
 
+from wazo_admin_ui.helpers.plugind import plugind
+
 
 logger = logging.getLogger(__name__)
 
 
 class PluginService(object):
-    pass
+
+    def install_plugin(self, plugin):
+        return plugind.plugins.install(plugin['url'], plugin['method'])

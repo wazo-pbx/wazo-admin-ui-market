@@ -101,6 +101,9 @@ function call_ajax_plugin(url, callback, body, method) {
     data: data,
     success: function(data) {
       callback(data);
+    },
+    error: function(data) {
+      setTimeout(function() {location.reload();}, 3000);
     }
   });
 }

@@ -13,7 +13,7 @@ from flask_classful import route
 
 from wazo_admin_ui.helpers.classful import BaseView
 
-from .market import MARKETS
+from .market import get_market
 
 class PluginView(BaseView):
 
@@ -22,7 +22,8 @@ class PluginView(BaseView):
         return render_template('plugin/list.html')
 
     def list_plugin(self):
-        return render_template('plugin/list_plugins.html', market=MARKETS['items'])
+        market = get_market()
+        return render_template('plugin/list_plugins.html', market=market['items'])
 
     @route('/install_plugin/', methods=['POST'])
     def install_plugin(self):
@@ -39,9 +40,10 @@ class PluginView(BaseView):
     def search_plugin(self):
         body = request.get_json()
         search = body['value']
+        market = get_market()
 
         res = []
-        for entry in MARKETS['items']:
+        for entry in market['items']:
             if search in entry.values():
                 res.append(entry)
 
@@ -51,16 +53,17 @@ class PluginView(BaseView):
     def filter_plugin(self):
         body = request.get_json()
         filter = body['value']
+        market = get_market()
 
         if filter == 'installed':
             is_installed = True
         if filter == 'not_installed':
             is_installed = False
         if filter == 'all':
-            return render_template('plugin/list_plugins.html', market=MARKETS['items'])
+            return render_template('plugin/list_plugins.html', market=market['items'])
 
         res = []
-        for entry in MARKETS['items']:
+        for entry in market['items']:
             if entry['is_installed'] == is_installed:
                 res.append(entry)
 

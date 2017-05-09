@@ -5,7 +5,7 @@ set -e
 case "$1" in
     remove)
         rm -f /etc/wazo-admin-ui/conf.d/plugin.yml
-		    systemctl restart wazo-admin-ui
+        systemctl restart wazo-admin-ui
     ;;
 
     deconfigure|upgrade|failed-upgrade)

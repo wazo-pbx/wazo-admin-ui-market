@@ -1,4 +1,4 @@
-Source: wazo-admin-ui-plugin
+Source: wazo-admin-ui-market
 Section: python
 Priority: extra
 Maintainer: Wazo Maintainers <dev@wazo.community>
@@ -6,7 +6,7 @@ Build-Depends: debhelper (>= 9), dh-python, dh-systemd (>= 1.5), python-all (>= 
 Standards-Version: 3.9.6
 X-Python-Version: >= 2.7
 
-Package: wazo-admin-ui-plugin
+Package: wazo-admin-ui-market
 Architecture: all
 Depends: ${python:Depends},
          ${misc:Depends},

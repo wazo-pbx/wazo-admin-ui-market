@@ -4,7 +4,7 @@ set -e
 
 case "$1" in
     remove)
-        rm -f /etc/wazo-admin-ui/conf.d/plugin.yml
+        rm -f /etc/wazo-admin-ui/conf.d/market.yml
         systemctl restart wazo-admin-ui
     ;;
 

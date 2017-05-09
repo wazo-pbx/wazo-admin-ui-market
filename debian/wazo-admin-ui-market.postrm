@@ -4,15 +4,15 @@ set -e
 
 case "$1" in
     remove)
-        rm -f /etc/wazo-admin-ui/conf.d/market.yml
         systemctl restart wazo-admin-ui
     ;;
 
-    deconfigure|upgrade|failed-upgrade)
+    purge|upgrade|disappear|failed-upgrade|abort-install|abort-upgrade)
+
     ;;
 
     *)
-        echo "prerm called with unknown argument \`$1'" >&2
+        echo "postrm called with unknown argument \`$1'" >&2
         exit 1
     ;;
 esac

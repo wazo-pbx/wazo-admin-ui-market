@@ -22,70 +22,62 @@ class PluginView(BaseView):
         return render_template('plugin/list.html')
 
     def list_plugin(self):
-        market = get_market()
-        plugins_installed = self.service.list()['items']
-        for available_plugin in market['items']:
-            for plugin_installed in plugins_installed:
-                if available_plugin.get('namespace') == plugin_installed.get('namespace') and available_plugin.get('name') == plugin_installed.get('name'):
-                    available_plugin['is_installed'] = True
-                else:
-                    available_plugin['is_installed'] = False
+        available_plugins = get_market()['items']
+        installed_plugins = self.service.list()['items']
 
-        return render_template('plugin/list_plugins.html', market=market['items'])
+        results = self._merge_plugins(available_plugins, installed_plugins)
+        return render_template('plugin/list_plugins.html', market=results)
 
     @route('/install_plugin/', methods=['POST'])
     def install_plugin(self):
         body = request.get_json()
-        plugin = self.service.install_plugin(body)
+        plugin = self.service.install(body)
         return jsonify(plugin)
 
     @route('/remove_plugin/', methods=['POST'])
     def remove_plugin(self):
         body = request.get_json()
-        self.service.uninstall_plugin(body)
-        return jsonify(body)
+        plugin = self.service.uninstall(body)
+        return jsonify(plugin)
 
     @route('/search_plugin/', methods=['POST'])
     def search_plugin(self):
-        body = request.get_json()
-        search = body['value']
-        market = get_market()
+        search = request.get_json().get('value')
+        available_plugins = get_market()['items']
 
-        res = []
-        for entry in market['items']:
-            if search in entry.values():
-                res.append(entry)
-
-        return render_template('plugin/list_plugins.html', market=res)
+        results = [plugin for plugin in available_plugins if search in plugin.values()]
+        return render_template('plugin/list_plugins.html', market=results)
 
     @route('/filter_plugin/', methods=['POST'])
     def filter_plugin(self):
-        body = request.get_json()
-        filter = body['value']
-        market = get_market()
-        plugins_installed = self.service.list()['items']
-        for available_plugin in market['items']:
-            for plugin_installed in plugins_installed:
-                if available_plugin.get('namespace') == plugin_installed.get('namespace') and available_plugin.get('name') == plugin_installed.get('name'):
-                    available_plugin['is_installed'] = True
-                else:
-                    available_plugin['is_installed'] = False
+        filter_ = request.get_json().get('value')
+        available_plugins = get_market()['items']
+        installed_plugins = self.service.list()['items']
 
-        if filter == 'installed':
-            is_installed = True
-        if filter == 'not_installed':
-            is_installed = False
-        if filter == 'all':
-            return render_template('plugin/list_plugins.html', market=market['items'])
+        results = self._get_filtered_plugins(filter_, available_plugins, installed_plugins)
+        return render_template('plugin/list_plugins.html', market=results)
 
-        results = []
-        if is_installed:
-            results = plugins_installed
+    def _get_filtered_plugins(self, filter_, available_plugins, installed_plugins):
+        if filter_ == 'installed':
+            results = installed_plugins
             for result in results:
                 result['is_installed'] = True
-        else:
-            for plugin in market['items']:
-                if not plugin['is_installed']:
-                    results.append(plugin)
+            return results
 
-        return render_template('plugin/list_plugins.html', market=results)
+        results = self._merge_plugins(available_plugins, installed_plugins)
+        if filter_ == 'not_installed':
+            results = [plugin for plugin in results if not plugin['is_installed']]
+
+        return results
+
+    def _merge_plugins(self, available_plugins, installed_plugins):
+        results = []
+        for available in available_plugins:
+            result = available
+            result['is_installed'] = False
+            for installed in installed_plugins:
+                if available.get('namespace') == installed.get('namespace') and \
+                   available.get('name') == installed.get('name'):
+                    result['is_installed'] = True
+            results.append(result)
+        return results

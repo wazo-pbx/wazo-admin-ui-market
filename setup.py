@@ -7,7 +7,7 @@ from setuptools import find_packages
 from setuptools import setup
 
 setup(
-    name='wazo_admin_ui_plugin',
+    name='wazo_admin_ui_market',
     version='0.1',
 
     description='Wazo Admin UI Plugin',
@@ -23,7 +23,7 @@ setup(
 
     entry_points={
         'wazo_admin_ui.plugins': [
-            'plugin = plugin.plugin:Plugin',
+            'market = wazo_admin_ui_market.plugin:Plugin',
         ]
     }
 )

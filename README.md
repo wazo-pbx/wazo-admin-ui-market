@@ -1,4 +1,4 @@
-Plugin plugin for wazo-admin-ui
+Plugin market for wazo-admin-ui
 
 Install
 -------

@@ -4,7 +4,6 @@
 
 from __future__ import unicode_literals
 
-import re
 from flask import render_template
 from flask import request
 from flask import jsonify
@@ -14,6 +13,7 @@ from flask_classful import route
 from wazo_admin_ui.helpers.classful import BaseView
 
 from .market import get_market
+
 
 class PluginView(BaseView):
 
@@ -34,6 +34,7 @@ class PluginView(BaseView):
     @route('/remove_plugin/', methods=['POST'])
     def remove_plugin(self):
         body = request.get_json()
+        self.service.uninstall_plugin(body)
         return jsonify(body)
 
     @route('/search_plugin/', methods=['POST'])

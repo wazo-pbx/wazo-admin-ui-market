@@ -14,3 +14,6 @@ class PluginService(object):
 
     def install_plugin(self, plugin):
         return plugind.plugins.install(plugin['url'], plugin['method'])
+
+    def uninstall_plugin(self, plugin):
+        return plugind.plugins.uninstall(plugin['namespace'], plugin['name'])

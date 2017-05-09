@@ -1,2 +1,2 @@
-recursive-include plugin/templates *
-recursive-include plugin/static *
+recursive-include wazo_admin_ui_market/templates *
+recursive-include wazo_admin_ui_market/static *

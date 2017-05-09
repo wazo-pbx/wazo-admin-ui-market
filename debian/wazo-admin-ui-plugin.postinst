@@ -4,7 +4,7 @@ set -e
 
 case "$1" in
 	configure)
-		systemctl restart wazo-admin-ui
+		systemctl restart wazo-admin-ui || true
 	;;
 
 	abort-upgrade|abort-remove|abort-deconfigure)

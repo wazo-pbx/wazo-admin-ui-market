@@ -1,19 +1,19 @@
 {% macro _render_plugin(entry) %}
   <div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="small-box bg-{{ entry.color }} box box-solid">
+    <div class="small-box bg-{{ entry.color|default('green') }} box box-solid">
       <div class="inner">
-        <h3>{{ entry.name }}</h3>
+        <h3>{{ entry.display_name }}</h3>
         <p>By {{ entry.author }}</p>
         {{ _render_tags(entry.tags) }}
-        {{ _render_button(entry.is_installed|default(False), entry.plugin_name, entry.url, entry.namespace|default('wazo-official'), entry.method|default('git')) }}
+        {{ _render_button(entry.is_installed|default(False), entry.name, entry.url, entry.namespace, entry.method|default('git')) }}
       </div>
       <div class="icon">
-        <i class="fa fa-{{ entry.icon }}"></i>
+        <i class="fa fa-{{ entry.icon|default('gears') }}"></i>
       </div>
-      <a href="{{ entry.url or '#' }}" class="small-box-footer" target="_blank">
+      <a href="{{ entry.homepage or '#' }}" class="small-box-footer" target="_blank">
         More info <i class="fa fa-arrow-circle-right"></i>
       </a>
-      <div class="overlay {% if not entry.on_installation %}hidden{% endif %}" id="{{ entry.plugin_name }}">
+      <div class="overlay {% if not entry.on_installation %}hidden{% endif %}" id="{{ entry.name }}">
         <i class="fa fa-refresh fa-spin"></i>
       </div>
     </div>

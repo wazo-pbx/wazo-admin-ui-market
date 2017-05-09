@@ -23,6 +23,14 @@ class PluginView(BaseView):
 
     def list_plugin(self):
         market = get_market()
+        plugins_installed = self.service.list()['items']
+        for available_plugin in market['items']:
+            for plugin_installed in plugins_installed:
+                if available_plugin.get('namespace') == plugin_installed.get('namespace') and available_plugin.get('name') == plugin_installed.get('name'):
+                    available_plugin['is_installed'] = True
+                else:
+                    available_plugin['is_installed'] = False
+
         return render_template('plugin/list_plugins.html', market=market['items'])
 
     @route('/install_plugin/', methods=['POST'])
@@ -55,6 +63,13 @@ class PluginView(BaseView):
         body = request.get_json()
         filter = body['value']
         market = get_market()
+        plugins_installed = self.service.list()['items']
+        for available_plugin in market['items']:
+            for plugin_installed in plugins_installed:
+                if available_plugin.get('namespace') == plugin_installed.get('namespace') and available_plugin.get('name') == plugin_installed.get('name'):
+                    available_plugin['is_installed'] = True
+                else:
+                    available_plugin['is_installed'] = False
 
         if filter == 'installed':
             is_installed = True
@@ -63,9 +78,14 @@ class PluginView(BaseView):
         if filter == 'all':
             return render_template('plugin/list_plugins.html', market=market['items'])
 
-        res = []
-        for entry in market['items']:
-            if entry['is_installed'] == is_installed:
-                res.append(entry)
+        results = []
+        if is_installed:
+            results = plugins_installed
+            for result in results:
+                result['is_installed'] = True
+        else:
+            for plugin in market['items']:
+                if not plugin['is_installed']:
+                    results.append(plugin)
 
-        return render_template('plugin/list_plugins.html', market=res)
+        return render_template('plugin/list_plugins.html', market=results)

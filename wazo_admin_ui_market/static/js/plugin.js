@@ -100,6 +100,7 @@ function call_ajax_plugin(url, callback, body, method) {
     contentType: 'application/json',
     data: data,
     success: function(data) {
+      setTimeout(function() {location.reload();}, 3000);
       callback(data);
     },
     error: function(data) {

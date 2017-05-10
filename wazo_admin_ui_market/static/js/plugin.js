@@ -71,12 +71,16 @@ function launch_remove_plugin(remove_url, body) {
 
 function callback_install(data) {
   $('#' + body.name).addClass('hidden');
-  console.log(data);
+  setTimeout(function() {
+    location.reload();
+  }, 3000);
 }
 
 function callback_remove(data) {
   $('#' + body.name).addClass('hidden');
-  console.log(data);
+  setTimeout(function() {
+    location.reload();
+  }, 3000);
 }
 
 function callback_search(data) {
@@ -100,11 +104,12 @@ function call_ajax_plugin(url, callback, body, method) {
     contentType: 'application/json',
     data: data,
     success: function(data) {
-      setTimeout(function() {location.reload();}, 3000);
       callback(data);
     },
     error: function(data) {
-      setTimeout(function() {location.reload();}, 3000);
+      setTimeout(function() {
+        location.reload();
+      }, 3000);
     }
   });
 }

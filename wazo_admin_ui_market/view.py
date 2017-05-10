@@ -58,26 +58,27 @@ class PluginView(BaseView):
         return render_template('plugin/list_plugins.html', market=results)
 
     def _get_filtered_plugins(self, filter_, available_plugins, installed_plugins):
-        if filter_ == 'installed':
-            results = installed_plugins
-            for result in results:
-                result['is_installed'] = True
-            return results
-
         results = self._merge_plugins(available_plugins, installed_plugins)
-        if filter_ == 'not_installed':
+
+        if filter_ == 'installed':
+            results = [plugin for plugin in results if plugin['is_installed']]
+        elif filter_ == 'not_installed':
             results = [plugin for plugin in results if not plugin['is_installed']]
 
         return results
 
     def _merge_plugins(self, available_plugins, installed_plugins):
-        results = []
+        for plugin in available_plugins:
+            plugin['is_installed'] = False
+
+        for plugin in installed_plugins:
+            plugin['is_installed'] = True
+
         for available in available_plugins:
-            result = available
-            result['is_installed'] = False
             for installed in installed_plugins:
                 if available.get('namespace') == installed.get('namespace') and \
                    available.get('name') == installed.get('name'):
-                    result['is_installed'] = True
-            results.append(result)
-        return results
+                    available['is_installed'] = True
+                    installed_plugins.remove(installed)
+
+        return available_plugins + installed_plugins

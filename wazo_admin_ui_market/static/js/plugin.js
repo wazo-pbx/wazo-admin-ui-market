@@ -71,16 +71,12 @@ function launch_remove_plugin(remove_url, body) {
 
 function callback_install(data) {
   $('#' + body.name).addClass('hidden');
-  setTimeout(function() {
-    location.reload();
-  }, 3000);
+  location.reload();
 }
 
 function callback_remove(data) {
   $('#' + body.name).addClass('hidden');
-  setTimeout(function() {
-    location.reload();
-  }, 3000);
+  location.reload();
 }
 
 function callback_search(data) {

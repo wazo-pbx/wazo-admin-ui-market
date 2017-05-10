@@ -48,9 +48,9 @@
                     <span class="input-group-addon">
                       <i class="fa fa-download"></i>
                     </span>
-                    <input class="form-control" placeholder="GIT url..." type="text">
+                    <input id="git-url-to-install" class="form-control" placeholder="GIT url..." type="text"></input>
                       <span class="input-group-btn">
-                        <button type="button" class="btn btn-primary btn-flat">Install</button>
+                        <button type="button" data-git-install data-install-url="{{ url_for('plugin.PluginView:install_plugin') }}" class="btn btn-primary btn-flat">Install</button>
                       </span>
                   </div>
                 </div>

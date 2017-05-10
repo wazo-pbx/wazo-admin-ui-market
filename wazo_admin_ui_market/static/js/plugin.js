@@ -21,6 +21,15 @@ $(document).on('click', "[data-installed]", function() {
     }
 });
 
+$(document).on('click', "[data-git-install]", function() {
+    body = {
+      url: $('#git-url-to-install').val(),
+      method: 'git'
+    }
+    install_url = $(this).attr("data-install-url");
+    install_plugin(install_url, body);
+});
+
 $('#search_plugin').on('change', function() {
     res = $('#search_plugin').val();
     search_url = $('#search_plugin').attr("data-search-url");

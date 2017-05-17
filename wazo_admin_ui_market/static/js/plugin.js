@@ -21,7 +21,11 @@ function connect(token) {
     };
     socket.onmessage = function(event) {
         if (started) {
-            console.log("message received: " + event.data);
+            payload = JSON.parse(event.data);
+            if (payload.data.status == 'completed') {
+                console.log('Time to reload webi');
+                location.reload();
+            }
             return;
         }
 
@@ -139,12 +143,10 @@ function launch_remove_plugin(remove_url, body) {
 
 function callback_install(data) {
   $('#' + body.name).addClass('hidden');
-  location.reload();
 }
 
 function callback_remove(data) {
   $('#' + body.name).addClass('hidden');
-  location.reload();
 }
 
 function callback_search(data) {
@@ -172,8 +174,9 @@ function call_ajax_plugin(url, callback, body, method) {
     },
     error: function(data) {
       setTimeout(function() {
+        console.log('There is some error, please reload');
         location.reload();
-      }, 3000);
+      }, 4000);
     }
   });
 }

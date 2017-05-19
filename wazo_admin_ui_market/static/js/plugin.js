@@ -16,7 +16,7 @@ function connect(token) {
     };
     socket.onmessage = function(event) {
         if (started) {
-            payload = JSON.parse(event.data);
+            var payload = JSON.parse(event.data);
             if (payload.data.status == 'completed') {
                 console.log('Time to reload webi');
                 location.reload();
@@ -27,7 +27,8 @@ function connect(token) {
         var msg = JSON.parse(event.data);
         switch (msg.op) {
             case "init":
-                subscribe("*");
+                subscribe("plugin_install_progress");
+                subscribe("plugin_uninstall_progress");
                 start();
                 break;
             case "start":

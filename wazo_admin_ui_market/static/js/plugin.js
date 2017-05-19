@@ -7,13 +7,8 @@ function connect(token) {
         return;
     }
 
-    currentLocation = window.location;
-    host = currentLocation.host;
-    if (currentLocation.port) {
-        host = host + ":" + currentLocation.port;
-    }
-    ws_url = "wss://" + host + "/api/websocketd/?token=" + token;
-
+    var host = window.location.host;
+    var ws_url = "wss://" + host + "/api/websocketd/?token=" + token;
     socket = new WebSocket(ws_url);
     socket.onclose = function(event) {
         socket = null;

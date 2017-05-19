@@ -1,3 +1,62 @@
+var socket = null;
+var started = false;
+
+function connect(token) {
+    if (socket != null) {
+        console.log("socket already connected");
+        return;
+    }
+
+    var host = window.location.host;
+    var ws_url = "wss://" + host + "/api/websocketd/?token=" + token;
+    socket = new WebSocket(ws_url);
+    socket.onclose = function(event) {
+        socket = null;
+        console.log("websocketd closed with code " + event.code + " and reason '" + event.reason + "'");
+    };
+    socket.onmessage = function(event) {
+        if (started) {
+            var payload = JSON.parse(event.data);
+            if (payload.data.status == 'completed') {
+                console.log('Time to reload webi');
+                location.reload();
+            }
+            return;
+        }
+
+        var msg = JSON.parse(event.data);
+        switch (msg.op) {
+            case "init":
+                subscribe("plugin_install_progress");
+                subscribe("plugin_uninstall_progress");
+                start();
+                break;
+            case "start":
+                started = true;
+                console.log("waiting for messages");
+                break;
+        }
+    };
+    started = false;
+}
+
+function subscribe(event_name) {
+    var msg = {
+        op: "subscribe",
+        data: {
+          event_name: event_name
+        }
+    };
+    socket.send(JSON.stringify(msg));
+};
+
+function start() {
+    var msg = {
+        op: "start"
+    };
+    socket.send(JSON.stringify(msg));
+}
+
 $(document).on('click', "[data-installed]", function() {
     is_installed = $(this).attr("data-installed");
     name = $(this).attr("data-name");
@@ -80,12 +139,10 @@ function launch_remove_plugin(remove_url, body) {
 
 function callback_install(data) {
   $('#' + body.name).addClass('hidden');
-  location.reload();
 }
 
 function callback_remove(data) {
   $('#' + body.name).addClass('hidden');
-  location.reload();
 }
 
 function callback_search(data) {
@@ -113,8 +170,9 @@ function call_ajax_plugin(url, callback, body, method) {
     },
     error: function(data) {
       setTimeout(function() {
+        console.log('There is some error, please reload');
         location.reload();
-      }, 3000);
+      }, 4000);
     }
   });
 }

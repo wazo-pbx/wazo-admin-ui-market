@@ -138,11 +138,9 @@ function launch_remove_plugin(remove_url, body) {
 }
 
 function callback_install(data) {
-  $('#' + body.name).addClass('hidden');
 }
 
 function callback_remove(data) {
-  $('#' + body.name).addClass('hidden');
 }
 
 function callback_search(data) {

@@ -1,5 +1,10 @@
 var socket = null;
 var started = false;
+var btn_loading = null;
+
+$(document).ready(function() {
+    btn_loading = Ladda.create(document.querySelector('.ladda-button'));
+});
 
 function connect(token) {
     if (socket != null) {
@@ -81,12 +86,16 @@ $(document).on('click', "[data-installed]", function() {
 });
 
 $(document).on('click', "[data-git-install]", function() {
-    body = {
-      url: $('#git-url-to-install').val(),
-      method: 'git'
+    url = $('#git-url-to-install').val();
+    if (url) {
+      body = {
+        url: url,
+        method: 'git'
+      }
+
+      install_url = $(this).attr("data-install-url");
+      install_plugin(install_url, body, from_git=true);
     }
-    install_url = $(this).attr("data-install-url");
-    install_plugin(install_url, body);
 });
 
 $('#search_plugin').on('change', function() {
@@ -120,9 +129,12 @@ function remove_plugin(remove_url, body) {
   }
 }
 
-function install_plugin(install_url, body) {
+function install_plugin(install_url, body, from_git=false) {
   res = confirm('Are you sure you want to install this plugin?');
   if (res == true) {
+    if (from_git) {
+      btn_loading.start();
+    }
     launch_install_plugin(install_url, body);
   }
 }

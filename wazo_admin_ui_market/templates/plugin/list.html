@@ -50,7 +50,9 @@
                     </span>
                     <input id="git-url-to-install" class="form-control" placeholder="GIT url..." type="text"></input>
                       <span class="input-group-btn">
-                        <button type="button" data-git-install data-install-url="{{ url_for('plugin.PluginView:install_plugin') }}" class="btn btn-primary btn-flat">Install</button>
+                        <button type="button" data-git-install data-install-url="{{ url_for('plugin.PluginView:install_plugin') }}" class="ladda-button btn btn-primary btn-flat" data-style="slide-left">
+                          <span class="ladda-label">Install</span>
+                        </button>
                       </span>
                   </div>
                 </div>
@@ -65,10 +67,16 @@
 {% endblock %}
 
 {% block additional_js %}
+  <script src="{{ url_for('.static', filename='js/spin.min.js') }}"></script>
+  <script src="{{ url_for('.static', filename='js/ladda.min.js') }}"></script>
   <script src="{{ url_for('.static', filename='js/plugin.js') }}"></script>
   <script>
     var list_url = "{{ url_for('plugin.PluginView:list_plugin') }}";
     connect("{{ current_user.get_id() }}");
     call_ajax_plugin(list_url, callback_list, '', 'GET');
   </script>
+{% endblock %}
+
+{% block additional_css %}
+  <link href="{{ url_for('.static', filename='css/ladda-themeless.min.css') }}" rel="stylesheet" media="screen" type="text/css">
 {% endblock %}

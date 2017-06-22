@@ -33,7 +33,7 @@
 {% endmacro %}
 
 {% macro _render_button(is_installed, plugin_name, url, namespace, method) %}
-  <button type="button" class="btn btn-default btn-xs margin label"
+  <button type="button" class="btn btn-default btn-xs margin label" style="z-index:1;position:relative;"
     data-installed="{{ is_installed }}"
     data-name="{{ plugin_name }}"
     data-url="{{ url }}"

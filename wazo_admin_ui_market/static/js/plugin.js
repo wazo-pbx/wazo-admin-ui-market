@@ -68,12 +68,15 @@ $(document).on('click', "[data-installed]", function() {
     url = $(this).attr("data-url");
     namespace = $(this).attr("data-namespace");
     method = $(this).attr("data-method");
+    options = $(this).attr("data-options") || '{}';
+    options = $.parseJSON(options);
 
     body = {
       namespace: namespace,
       name: name,
       url: url,
-      method: method
+      method: method,
+      options: options
     }
 
     if (is_installed == 'True') {

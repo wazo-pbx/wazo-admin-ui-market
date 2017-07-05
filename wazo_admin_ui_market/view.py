@@ -20,11 +20,7 @@ class PluginView(BaseView):
         return render_template('plugin/list.html')
 
     def list_plugin(self):
-        available_plugins = get_market()['items']
-        installed_plugins = self.service.list()['items']
-
-        results = self._merge_plugins(available_plugins, installed_plugins)
-        return render_template('plugin/list_plugins.html', market=results)
+        return render_template('plugin/list_plugins.html', market=[])
 
     @route('/install_plugin/', methods=['POST'])
     def install_plugin(self):

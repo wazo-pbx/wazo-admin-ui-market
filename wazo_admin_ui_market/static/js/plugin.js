@@ -4,6 +4,7 @@ var btn_loading = null;
 
 $(document).ready(function() {
     btn_loading = Ladda.create(document.querySelector('.ladda-button'));
+    show_only_official();
 });
 
 function connect(token) {

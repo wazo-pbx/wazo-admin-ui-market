@@ -49,10 +49,17 @@ class PluginView(BaseView):
     @route('/filter_plugin/', methods=['POST'])
     def filter_plugin(self):
         filter_ = request.get_json().get('value')
-        available_plugins = get_market()['items']
+
+        available_plugins = self.service.market()['items']
         installed_plugins = self.service.list()['items']
 
         results = self._get_filtered_plugins(filter_, available_plugins, installed_plugins)
+        return render_template('plugin/list_plugins.html', market=results)
+
+    @route('/show_only_official/', methods=['POST'])
+    def show_only_official(self):
+        results = self.service.market(search='official')['items']
+
         return render_template('plugin/list_plugins.html', market=results)
 
     def _get_filtered_plugins(self, filter_, available_plugins, installed_plugins):

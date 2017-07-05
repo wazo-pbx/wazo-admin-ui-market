@@ -36,6 +36,14 @@
                     </select>
                   </div>
                 </div>
+                <div class="col-md-2 pull-right">
+                  <div class="checkbox">
+                    <label>
+                      <input id="show_only_official" type="checkbox" checked data-show-official-url="{{ url_for('plugin.PluginView:show_only_official') }}"></input>
+                      Show only official
+                    </label>
+                  </div>
+                </div>
               </div>
               <div id="plugins"></div>
             </div>

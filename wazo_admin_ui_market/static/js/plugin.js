@@ -114,16 +114,33 @@ $('#search_plugin').on('change', function() {
 });
 
 $('#filter_plugin').on('change', function() {
-    res = $('#filter_plugin').val();
-    filter_url = $('#filter_plugin').attr("data-filter-url");
-
-    if (res) {
-      filter = {
-        value: res
-      }
-      call_ajax_plugin(filter_url, callback_filter, filter);
-    }
+    filter_plugins();
 });
+
+$('#show_only_official').on('change', function() {
+  show_only_official();
+});
+
+function show_only_official() {
+  filter_url = $('#show_only_official').attr("data-show-official-url");
+  official = $('#show_only_official').is(':checked');
+  if (official) {
+    call_ajax_plugin(filter_url, callback_filter);
+  } else {
+    filter_plugins();
+  }
+}
+
+function filter_plugins() {
+  res = $('#filter_plugin').val();
+  filter_url = $('#filter_plugin').attr("data-filter-url");
+  if (res) {
+    filter = {
+      value: res
+    }
+  }
+  call_ajax_plugin(filter_url, callback_filter, filter);
+}
 
 function remove_plugin(remove_url, body) {
   res = confirm('Are you sure you want to remove this plugin?');

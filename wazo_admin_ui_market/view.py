@@ -12,8 +12,6 @@ from flask_classful import route
 
 from wazo_admin_ui.helpers.classful import BaseView
 
-from .market import get_market
-
 
 class PluginView(BaseView):
 
@@ -43,7 +41,7 @@ class PluginView(BaseView):
     @route('/search_plugin/', methods=['POST'])
     def search_plugin(self):
         search = request.get_json().get('value')
-        available_plugins = get_market()['items']
+        available_plugins = self.service.market()['items']
 
         results = [plugin for plugin in available_plugins if search in plugin.values()]
         return render_template('plugin/list_plugins.html', market=results)

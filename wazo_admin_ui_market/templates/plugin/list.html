@@ -36,19 +36,28 @@
                     </select>
                   </div>
                 </div>
+                <div class="col-md-2 pull-right">
+                  <div class="checkbox">
+                    <label>
+                      <input id="show_only_official" type="checkbox" checked data-show-official-url="{{ url_for('plugin.PluginView:show_only_official') }}"></input>
+                      Show only official
+                    </label>
+                  </div>
+                </div>
               </div>
               <div id="plugins"></div>
             </div>
 
             <div class="tab-pane" id="git">
               <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-6">
                   <h4>Give your GIT url to install a plugin!</h4>
                   <div class="input-group">
                     <span class="input-group-addon">
                       <i class="fa fa-download"></i>
                     </span>
-                    <input id="git-url-to-install" class="form-control" placeholder="GIT url..." type="text"></input>
+                    <input style="width:65%" id="git-url-to-install" class="form-control" placeholder="GIT url" type="text"></input>
+                    <input style="width:35%" id="git-branch-tag" class="form-control" placeholder="Branch or tag (optional)" type="text"></input>
                       <span class="input-group-btn">
                         <button type="button" data-git-install data-install-url="{{ url_for('plugin.PluginView:install_plugin') }}" class="ladda-button btn btn-primary btn-flat" data-style="slide-left">
                           <span class="ladda-label">Install</span>

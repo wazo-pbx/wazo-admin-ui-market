@@ -12,8 +12,6 @@ from flask_classful import route
 
 from wazo_admin_ui.helpers.classful import BaseView
 
-from .market import get_market
-
 
 class PluginView(BaseView):
 
@@ -22,11 +20,7 @@ class PluginView(BaseView):
         return render_template('plugin/list.html')
 
     def list_plugin(self):
-        available_plugins = get_market()['items']
-        installed_plugins = self.service.list()['items']
-
-        results = self._merge_plugins(available_plugins, installed_plugins)
-        return render_template('plugin/list_plugins.html', market=results)
+        return render_template('plugin/list_plugins.html', market=[])
 
     @route('/install_plugin/', methods=['POST'])
     def install_plugin(self):
@@ -43,7 +37,7 @@ class PluginView(BaseView):
     @route('/search_plugin/', methods=['POST'])
     def search_plugin(self):
         search = request.get_json().get('value')
-        available_plugins = get_market()['items']
+        available_plugins = self.service.market()['items']
 
         results = [plugin for plugin in available_plugins if search in plugin.values()]
         return render_template('plugin/list_plugins.html', market=results)
@@ -51,10 +45,19 @@ class PluginView(BaseView):
     @route('/filter_plugin/', methods=['POST'])
     def filter_plugin(self):
         filter_ = request.get_json().get('value')
-        available_plugins = get_market()['items']
+
+        available_plugins = self.service.market()['items']
         installed_plugins = self.service.list()['items']
 
         results = self._get_filtered_plugins(filter_, available_plugins, installed_plugins)
+        return render_template('plugin/list_plugins.html', market=results)
+
+    @route('/show_only_official/', methods=['POST'])
+    def show_only_official(self):
+        available_plugins = self.service.market(search='official')['items']
+        installed_plugins = self.service.list()['items']
+
+        results = self._merge_plugins(available_plugins, installed_plugins)
         return render_template('plugin/list_plugins.html', market=results)
 
     def _get_filtered_plugins(self, filter_, available_plugins, installed_plugins):

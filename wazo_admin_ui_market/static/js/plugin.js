@@ -4,6 +4,7 @@ var btn_loading = null;
 
 $(document).ready(function() {
     btn_loading = Ladda.create(document.querySelector('.ladda-button'));
+    show_only_official();
 });
 
 function connect(token) {
@@ -68,12 +69,15 @@ $(document).on('click', "[data-installed]", function() {
     url = $(this).attr("data-url");
     namespace = $(this).attr("data-namespace");
     method = $(this).attr("data-method");
+    options = $(this).attr("data-options") || '{}';
+    options = $.parseJSON(options);
 
     body = {
       namespace: namespace,
       name: name,
       url: url,
-      method: method
+      method: method,
+      options: options
     }
 
     if (is_installed == 'True') {
@@ -87,10 +91,15 @@ $(document).on('click', "[data-installed]", function() {
 
 $(document).on('click', "[data-git-install]", function() {
     url = $('#git-url-to-install').val();
+    branch = $('#git-branch-tag').val();
+    options = '{}';
+
     if (url) {
+      if (branch) { options = {ref: branch}; }
       body = {
         url: url,
-        method: 'git'
+        method: 'git',
+        options: options
       }
 
       install_url = $(this).attr("data-install-url");
@@ -111,16 +120,33 @@ $('#search_plugin').on('change', function() {
 });
 
 $('#filter_plugin').on('change', function() {
-    res = $('#filter_plugin').val();
-    filter_url = $('#filter_plugin').attr("data-filter-url");
-
-    if (res) {
-      filter = {
-        value: res
-      }
-      call_ajax_plugin(filter_url, callback_filter, filter);
-    }
+    filter_plugins();
 });
+
+$('#show_only_official').on('change', function() {
+  show_only_official();
+});
+
+function show_only_official() {
+  filter_url = $('#show_only_official').attr("data-show-official-url");
+  official = $('#show_only_official').is(':checked');
+  if (official) {
+    call_ajax_plugin(filter_url, callback_filter);
+  } else {
+    filter_plugins();
+  }
+}
+
+function filter_plugins() {
+  res = $('#filter_plugin').val();
+  filter_url = $('#filter_plugin').attr("data-filter-url");
+  if (res) {
+    filter = {
+      value: res
+    }
+  }
+  call_ajax_plugin(filter_url, callback_filter, filter);
+}
 
 function remove_plugin(remove_url, body) {
   res = confirm('Are you sure you want to remove this plugin?');

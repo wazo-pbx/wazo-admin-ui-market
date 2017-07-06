@@ -5,7 +5,12 @@
         <h3>{{ entry.display_name }}</h3>
         <p>By {{ entry.author }}</p>
         {{ _render_tags(entry.tags) }}
-        {{ _render_button(entry.is_installed|default(False), entry.name, entry.url, entry.namespace, entry.method|default('git')) }}
+        {{ _render_button(entry.is_installed|default(False),
+                          entry.name,
+                          entry.url,
+                          entry.namespace,
+                          entry.method|default('git'),
+                          entry.options) }}
       </div>
       <div class="icon">
         <i class="fa fa-{{ entry.icon|default('gears') }}"></i>
@@ -32,13 +37,14 @@
   {% endfor %}
 {% endmacro %}
 
-{% macro _render_button(is_installed, plugin_name, url, namespace, method) %}
+{% macro _render_button(is_installed, plugin_name, url, namespace, method, options) %}
   <button type="button" class="btn btn-default btn-xs margin label" style="z-index:1;position:relative;"
     data-installed="{{ is_installed }}"
     data-name="{{ plugin_name }}"
     data-url="{{ url }}"
     data-namespace="{{ namespace }}"
     data-method="git"
+    data-options='{{ options|tojson if options }}'
     {% if not is_installed %}
       data-install-url="{{ url_for('plugin.PluginView:install_plugin') }}"
     {% else %}

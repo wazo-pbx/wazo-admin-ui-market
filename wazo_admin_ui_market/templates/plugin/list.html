@@ -28,8 +28,7 @@
                 </div>
                 <div class="col-md-2 pull-right">
                   <div class="form-group">
-                    <select class="form-control" id="filter_plugin"
-                      data-filter-url="{{ url_for('plugin.PluginView:filter_plugin') }}">
+                    <select class="form-control" id="installed_plugin">
                       <option value="all">All</option>
                       <option value="installed">Installed</option>
                       <option value="not_installed">Not installed</option>
@@ -39,7 +38,7 @@
                 <div class="col-md-2 pull-right">
                   <div class="checkbox">
                     <label>
-                      <input id="show_only_official" type="checkbox" checked data-show-official-url="{{ url_for('plugin.PluginView:show_only_official') }}"></input>
+                      <input id="show_only_official" type="checkbox" checked></input>
                       Show only official
                     </label>
                   </div>

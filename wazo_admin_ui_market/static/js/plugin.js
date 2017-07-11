@@ -4,7 +4,7 @@ var btn_loading = null;
 
 $(document).ready(function() {
     btn_loading = Ladda.create(document.querySelector('.ladda-button'));
-    show_only_official();
+    search_plugins();
 });
 
 function connect(token) {
@@ -108,44 +108,39 @@ $(document).on('click', "[data-git-install]", function() {
 });
 
 $('#search_plugin').on('change', function() {
-    res = $('#search_plugin').val();
-    search_url = $('#search_plugin').attr("data-search-url");
-
-    if (res) {
-      search = {
-        value: res
-      }
-      call_ajax_plugin(search_url, callback_search, search);
-    }
+  search_plugins();
 });
 
-$('#filter_plugin').on('change', function() {
-    filter_plugins();
+$('#installed_plugin').on('change', function() {
+  search_plugins();
 });
 
 $('#show_only_official').on('change', function() {
-  show_only_official();
+  search_plugins();
 });
 
-function show_only_official() {
-  filter_url = $('#show_only_official').attr("data-show-official-url");
-  official = $('#show_only_official').is(':checked');
-  if (official) {
-    call_ajax_plugin(filter_url, callback_filter);
-  } else {
-    filter_plugins();
-  }
-}
+function search_plugins() {
+  let term = $('#search_plugin').val();
+  let official = $('#show_only_official').is(':checked');
+  let installed = $('#installed_plugin').val();
+  let search_url = $('#search_plugin').attr("data-search-url");
 
-function filter_plugins() {
-  res = $('#filter_plugin').val();
-  filter_url = $('#filter_plugin').attr("data-filter-url");
-  if (res) {
-    filter = {
-      value: res
+  let body = {}
+  if (term) {
+    body.search = term;
+  }
+  if (official) {
+    body.namespace = 'official';
+  }
+  if (installed) {
+    if (installed === 'installed') {
+      body.installed = true;
+    } else if (installed === 'not_installed') {
+      body.installed = false;
     }
   }
-  call_ajax_plugin(filter_url, callback_filter, filter);
+
+  call_ajax_plugin(search_url, callback_search, body);
 }
 
 function remove_plugin(remove_url, body) {

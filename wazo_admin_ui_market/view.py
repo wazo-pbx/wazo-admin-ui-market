@@ -10,10 +10,10 @@ from flask import jsonify
 from flask_menu.classy import classy_menu_item
 from flask_classful import route
 
-from wazo_admin_ui.helpers.classful import BaseView
+from wazo_admin_ui.helpers.classful import LoginRequiredView
 
 
-class PluginView(BaseView):
+class PluginView(LoginRequiredView):
 
     @classy_menu_item('.plugins', 'Plugins', order=0, icon="cubes")
     def index(self):
@@ -36,24 +36,9 @@ class PluginView(BaseView):
 
     @route('/search_plugin/', methods=['POST'])
     def search_plugin(self):
-        search = request.get_json().get('value')
-        results = self.service.market(search=search)['items']
-        return render_template('plugin/list_plugins.html', market=results)
-
-    @route('/filter_plugin/', methods=['POST'])
-    def filter_plugin(self):
-        filter_ = request.get_json().get('value')
-
-        if filter_ == 'installed':
-            results = self.service.market(installed=True)['items']
-        elif filter_ == 'not_installed':
-            results = self.service.market(installed=False)['items']
-        else:
-            results = self.service.market()['items']
-
-        return render_template('plugin/list_plugins.html', market=results)
-
-    @route('/show_only_official/', methods=['POST'])
-    def show_only_official(self):
-        results = self.service.market(namespace='official')['items']
+        payload = request.get_json()
+        search = payload.get('search')
+        namespace = payload.get('namespace')
+        installed = payload.get('installed')
+        results = self.service.market(search=search, namespace=namespace, installed=installed)['items']
         return render_template('plugin/list_plugins.html', market=results)

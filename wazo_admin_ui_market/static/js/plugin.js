@@ -188,14 +188,12 @@ function callback_filter(data) {
   $('#plugins').html(data);
 }
 
-function call_ajax_plugin(url, callback, body, method) {
-  if (!method) { method = 'POST'; }
-  if (body == '') { data = null; } else { data = JSON.stringify(body); }
+function call_ajax_plugin(url, callback, body) {
   $.ajax({
     url: url,
-    type: method,
+    type: 'POST',
     contentType: 'application/json',
-    data: data,
+    data: JSON.stringify(body),
     success: function(data) {
       callback(data);
     },

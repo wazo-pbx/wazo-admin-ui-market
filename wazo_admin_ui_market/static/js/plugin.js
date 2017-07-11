@@ -92,7 +92,7 @@ $(document).on('click', "[data-installed]", function() {
 $(document).on('click', "[data-git-install]", function() {
     url = $('#git-url-to-install').val();
     branch = $('#git-branch-tag').val();
-    options = '{}';
+    options = {};
 
     if (url) {
       if (branch) { options = {ref: branch}; }

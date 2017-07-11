@@ -8,7 +8,7 @@
         {% if entry.installed_version %}
           {{ _render_remove_button(entry.namespace, entry.name) }}
         {% else %}
-          {{ _render_install_button(entry.url, entry.options, entry.method|default('git')) }}
+          {{ _render_install_button(entry.namespace, entry.name, entry.version) }}
         {% endif %}
       </div>
       <div class="icon">
@@ -48,12 +48,12 @@
   </button>
 {% endmacro %}
 
-{% macro _render_install_button(url, options, method) %}
+{% macro _render_install_button(namespace, name, version) %}
   <button type="button" class="btn btn-default btn-xs margin label btn-install-plugin"
     style="z-index:1;position:relative;"
-    data-url="{{ url }}"
-    data-method="{{ method }}"
-    data-options='{{ options|tojson if options }}'
+    data-namespace="{{ namespace }}"
+    data-name="{{ name }}"
+    data-version="{{ version }}"
     data-install-url="{{ url_for('plugin.PluginView:install_plugin') }}"
   >
     Install

@@ -13,8 +13,7 @@ logger = logging.getLogger(__name__)
 class PluginService(object):
 
     def install(self, plugin):
-        if 'url' in plugin and 'method' in plugin:
-            return plugind.plugins.install(plugin['url'], plugin['method'], options=plugin.get('options'))
+        return plugind.plugins.install(method=plugin['method'], options=plugin.get('options'))
 
     def uninstall(self, plugin):
         if 'namespace' in plugin and 'name' in plugin:

@@ -19,9 +19,6 @@ class PluginView(LoginRequiredView):
     def index(self):
         return render_template('plugin/list.html')
 
-    def list_plugin(self):
-        return render_template('plugin/list_plugins.html', market=[])
-
     @route('/install_plugin/', methods=['POST'])
     def install_plugin(self):
         body = request.get_json()

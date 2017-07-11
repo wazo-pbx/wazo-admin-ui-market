@@ -186,10 +186,6 @@ function callback_filter(data) {
   $('#plugins').html(data);
 }
 
-function callback_list(data) {
-  $('#plugins').html(data);
-}
-
 function call_ajax_plugin(url, callback, body, method) {
   if (!method) { method = 'POST'; }
   if (body == '') { data = null; } else { data = JSON.stringify(body); }

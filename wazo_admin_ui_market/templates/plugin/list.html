@@ -83,9 +83,7 @@
   <script src="{{ url_for('.static', filename='js/ladda.min.js') }}"></script>
   <script src="{{ url_for('.static', filename='js/plugin.js') }}"></script>
   <script>
-    var list_url = "{{ url_for('plugin.PluginView:list_plugin') }}";
     connect("{{ current_user.get_id() }}");
-    call_ajax_plugin(list_url, callback_list, '', 'GET');
   </script>
 {% endblock %}
 

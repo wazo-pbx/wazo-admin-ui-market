@@ -63,30 +63,33 @@ function start() {
     socket.send(JSON.stringify(msg));
 }
 
-$(document).on('click', "[data-installed]", function() {
-    is_installed = $(this).attr("data-installed");
-    name = $(this).attr("data-name");
-    url = $(this).attr("data-url");
-    namespace = $(this).attr("data-namespace");
-    method = $(this).attr("data-method");
-    options = $(this).attr("data-options") || '{}';
-    options = $.parseJSON(options);
+$(document).on('click', ".btn-remove-plugin", function() {
+  let namespace = $(this).attr("data-namespace");
+  let name = $(this).attr("data-name");
 
-    body = {
-      namespace: namespace,
-      name: name,
-      url: url,
-      method: method,
-      options: options
-    }
+  let body = {
+    namespace: namespace,
+    name: name,
+  }
 
-    if (is_installed == 'True') {
-      remove_url = $(this).attr("data-remove-url");
-      remove_plugin(remove_url, body);
-    } else {
-      install_url = $(this).attr("data-install-url");
-      install_plugin(install_url, body);
-    }
+  let remove_url = $(this).attr("data-remove-url");
+  remove_plugin.call(this, remove_url, body);
+});
+
+$(document).on('click', ".btn-install-plugin", function() {
+  let url = $(this).attr("data-url");
+  let method = $(this).attr("data-method");
+  let options = $(this).attr("data-options") || '{}';
+  options = $.parseJSON(options);
+
+  let body = {
+    url: url,
+    method: method,
+    options: options
+  }
+
+  let install_url = $(this).attr("data-install-url");
+  install_plugin.call(this, install_url, body);
 });
 
 $(document).on('click', "[data-git-install]", function() {
@@ -146,7 +149,7 @@ function search_plugins() {
 function remove_plugin(remove_url, body) {
   res = confirm('Are you sure you want to remove this plugin?');
   if (res == true) {
-    launch_remove_plugin(remove_url, body);
+    launch_remove_plugin.call(this, remove_url, body);
   }
 }
 
@@ -156,17 +159,17 @@ function install_plugin(install_url, body, from_git=false) {
     if (from_git) {
       btn_loading.start();
     }
-    launch_install_plugin(install_url, body);
+    launch_install_plugin.call(this, install_url, body);
   }
 }
 
 function launch_install_plugin(install_url, body) {
-  $('#' + body.name).removeClass('hidden');
+  $(this).closest('.plugin-container').find('.overlay').removeClass('hidden');
   call_ajax_plugin(install_url, callback_install, body);
 }
 
 function launch_remove_plugin(remove_url, body) {
-  $('#' + body.name).removeClass('hidden');
+  $(this).closest('.plugin-container').find('.overlay').removeClass('hidden');
   call_ajax_plugin(remove_url, callback_remove, body);
 }
 

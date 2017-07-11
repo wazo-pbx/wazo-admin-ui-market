@@ -1,16 +1,15 @@
 {% macro _render_plugin(entry) %}
-  <div class="col-md-3 col-sm-6 col-xs-12">
+  <div class="col-md-3 col-sm-6 col-xs-12 plugin-container">
     <div class="small-box bg-{{ entry.color|default('green') }} box box-solid">
       <div class="inner">
         <h3>{{ entry.display_name }}</h3>
         <p>By {{ entry.author }}</p>
         {{ _render_tags(entry.tags) }}
-        {{ _render_button(True if entry.installed_version else False,
-                          entry.name,
-                          entry.url,
-                          entry.namespace,
-                          entry.method|default('git'),
-                          entry.options) }}
+        {% if entry.installed_version %}
+          {{ _render_remove_button(entry.namespace, entry.name) }}
+        {% else %}
+          {{ _render_install_button(entry.url, entry.options) }}
+        {% endif %}
       </div>
       <div class="icon">
         <i class="fa fa-{{ entry.icon|default('gears') }}"></i>
@@ -18,7 +17,7 @@
       <a href="{{ entry.homepage or '#' }}" class="small-box-footer" target="_blank">
         More info <i class="fa fa-arrow-circle-right"></i>
       </a>
-      <div class="overlay {% if not entry.on_installation %}hidden{% endif %}" id="{{ entry.name }}">
+      <div class="overlay {% if not entry.on_installation %}hidden{% endif %}">
         <i class="fa fa-refresh fa-spin"></i>
       </div>
     </div>
@@ -37,27 +36,28 @@
   {% endfor %}
 {% endmacro %}
 
-{% macro _render_button(is_installed, plugin_name, url, namespace, method, options) %}
-  <button type="button" class="btn btn-default btn-xs margin label" style="z-index:1;position:relative;"
-    data-installed="{{ is_installed }}"
-    data-name="{{ plugin_name }}"
-    data-url="{{ url }}"
+{% macro _render_remove_button(namespace, name) %}
+  <button type="button" class="btn btn-default btn-xs margin label btn-remove-plugin"
+    style="z-index:1;position:relative;"
     data-namespace="{{ namespace }}"
-    data-method="git"
-    data-options='{{ options|tojson if options }}'
-    {% if not is_installed %}
-      data-install-url="{{ url_for('plugin.PluginView:install_plugin') }}"
-    {% else %}
-      data-remove-url="{{ url_for('plugin.PluginView:remove_plugin') }}"
-    {% endif %}
+    data-name="{{ name }}"
+    data-remove-url="{{ url_for('plugin.PluginView:remove_plugin') }}"
   >
-  {% if is_installed %}
     Remove
     <i class="fa fa-trash"></i>
-  {% else %}
+  </button>
+{% endmacro %}
+
+{% macro _render_install_button(url, options) %}
+  <button type="button" class="btn btn-default btn-xs margin label btn-install-plugin"
+    style="z-index:1;position:relative;"
+    data-url="{{ url }}"
+    data-method="git"
+    data-options='{{ options|tojson if options }}'
+    data-install-url="{{ url_for('plugin.PluginView:install_plugin') }}"
+  >
     Install
     <i class="fa fa-download"></i>
-  {% endif %}
   </button>
 {% endmacro %}
 

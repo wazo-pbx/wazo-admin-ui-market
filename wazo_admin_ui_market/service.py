@@ -13,8 +13,7 @@ logger = logging.getLogger(__name__)
 class PluginService(object):
 
     def install(self, plugin):
-        if 'url' in plugin and 'method' in plugin:
-            return plugind.plugins.install(plugin['url'], plugin['method'], options=plugin.get('options'))
+        return plugind.plugins.install(method=plugin['method'], options=plugin.get('options'))
 
     def uninstall(self, plugin):
         if 'namespace' in plugin and 'name' in plugin:
@@ -23,5 +22,5 @@ class PluginService(object):
     def list(self):
         return plugind.plugins.list()
 
-    def market(self, search=None):
-        return plugind.market.list(search)
+    def market(self, search=None, **kwargs):
+        return plugind.market.list(search, **kwargs)

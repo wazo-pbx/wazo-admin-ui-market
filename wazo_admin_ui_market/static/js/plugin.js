@@ -4,7 +4,7 @@ var btn_loading = null;
 
 $(document).ready(function() {
     btn_loading = Ladda.create(document.querySelector('.ladda-button'));
-    show_only_official();
+    search_plugins();
 });
 
 function connect(token) {
@@ -63,95 +63,94 @@ function start() {
     socket.send(JSON.stringify(msg));
 }
 
-$(document).on('click', "[data-installed]", function() {
-    is_installed = $(this).attr("data-installed");
-    name = $(this).attr("data-name");
-    url = $(this).attr("data-url");
-    namespace = $(this).attr("data-namespace");
-    method = $(this).attr("data-method");
-    options = $(this).attr("data-options") || '{}';
-    options = $.parseJSON(options);
+$(document).on('click', ".btn-remove-plugin", function() {
+  let namespace = $(this).attr("data-namespace");
+  let name = $(this).attr("data-name");
 
-    body = {
+  let body = {
+    namespace: namespace,
+    name: name,
+  }
+
+  let remove_url = $(this).attr("data-remove-url");
+  remove_plugin.call(this, remove_url, body);
+});
+
+$(document).on('click', ".btn-install-plugin", function() {
+  let namespace = $(this).attr("data-namespace");
+  let name = $(this).attr("data-name");
+  let version = $(this).attr("version");
+
+  let body = {
+    method: 'market',
+    options: {
       namespace: namespace,
       name: name,
+      version: version,
+    },
+  }
+
+  let install_url = $(this).attr("data-install-url");
+  install_plugin.call(this, install_url, body);
+});
+
+$(document).on('click', ".btn-git-install-plugin", function() {
+  let url = $('#git-url-to-install').val();
+  let branch = $('#git-branch-tag').val();
+  let options = ((branch) ? {ref: branch} : {});
+
+  if (url) {
+    let body = {
       url: url,
-      method: method,
+      method: 'git',
       options: options
     }
 
-    if (is_installed == 'True') {
-      remove_url = $(this).attr("data-remove-url");
-      remove_plugin(remove_url, body);
-    } else {
-      install_url = $(this).attr("data-install-url");
-      install_plugin(install_url, body);
-    }
-});
-
-$(document).on('click', "[data-git-install]", function() {
-    url = $('#git-url-to-install').val();
-    branch = $('#git-branch-tag').val();
-    options = '{}';
-
-    if (url) {
-      if (branch) { options = {ref: branch}; }
-      body = {
-        url: url,
-        method: 'git',
-        options: options
-      }
-
-      install_url = $(this).attr("data-install-url");
-      install_plugin(install_url, body, from_git=true);
-    }
+    install_url = $(this).attr("data-install-url");
+    install_plugin(install_url, body, from_git=true);
+  }
 });
 
 $('#search_plugin').on('change', function() {
-    res = $('#search_plugin').val();
-    search_url = $('#search_plugin').attr("data-search-url");
-
-    if (res) {
-      search = {
-        value: res
-      }
-      call_ajax_plugin(search_url, callback_search, search);
-    }
+  search_plugins();
 });
 
-$('#filter_plugin').on('change', function() {
-    filter_plugins();
+$('#installed_plugin').on('change', function() {
+  search_plugins();
 });
 
 $('#show_only_official').on('change', function() {
-  show_only_official();
+  search_plugins();
 });
 
-function show_only_official() {
-  filter_url = $('#show_only_official').attr("data-show-official-url");
-  official = $('#show_only_official').is(':checked');
-  if (official) {
-    call_ajax_plugin(filter_url, callback_filter);
-  } else {
-    filter_plugins();
-  }
-}
+function search_plugins() {
+  let term = $('#search_plugin').val();
+  let official = $('#show_only_official').is(':checked');
+  let installed = $('#installed_plugin').val();
+  let search_url = $('#search_plugin').attr("data-search-url");
 
-function filter_plugins() {
-  res = $('#filter_plugin').val();
-  filter_url = $('#filter_plugin').attr("data-filter-url");
-  if (res) {
-    filter = {
-      value: res
+  let body = {}
+  if (term) {
+    body.search = term;
+  }
+  if (official) {
+    body.namespace = 'official';
+  }
+  if (installed) {
+    if (installed === 'installed') {
+      body.installed = true;
+    } else if (installed === 'not_installed') {
+      body.installed = false;
     }
   }
-  call_ajax_plugin(filter_url, callback_filter, filter);
+
+  call_ajax_plugin(search_url, callback_search, body);
 }
 
 function remove_plugin(remove_url, body) {
   res = confirm('Are you sure you want to remove this plugin?');
   if (res == true) {
-    launch_remove_plugin(remove_url, body);
+    launch_remove_plugin.call(this, remove_url, body);
   }
 }
 
@@ -161,17 +160,17 @@ function install_plugin(install_url, body, from_git=false) {
     if (from_git) {
       btn_loading.start();
     }
-    launch_install_plugin(install_url, body);
+    launch_install_plugin.call(this, install_url, body);
   }
 }
 
 function launch_install_plugin(install_url, body) {
-  $('#' + body.name).removeClass('hidden');
+  $(this).closest('.plugin-container').find('.overlay').removeClass('hidden');
   call_ajax_plugin(install_url, callback_install, body);
 }
 
 function launch_remove_plugin(remove_url, body) {
-  $('#' + body.name).removeClass('hidden');
+  $(this).closest('.plugin-container').find('.overlay').removeClass('hidden');
   call_ajax_plugin(remove_url, callback_remove, body);
 }
 
@@ -189,18 +188,12 @@ function callback_filter(data) {
   $('#plugins').html(data);
 }
 
-function callback_list(data) {
-  $('#plugins').html(data);
-}
-
-function call_ajax_plugin(url, callback, body, method) {
-  if (!method) { method = 'POST'; }
-  if (body == '') { data = null; } else { data = JSON.stringify(body); }
+function call_ajax_plugin(url, callback, body) {
   $.ajax({
     url: url,
-    type: method,
+    type: 'POST',
     contentType: 'application/json',
-    data: data,
+    data: JSON.stringify(body),
     success: function(data) {
       callback(data);
     },

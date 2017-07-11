@@ -28,8 +28,7 @@
                 </div>
                 <div class="col-md-2 pull-right">
                   <div class="form-group">
-                    <select class="form-control" id="filter_plugin"
-                      data-filter-url="{{ url_for('plugin.PluginView:filter_plugin') }}">
+                    <select class="form-control" id="installed_plugin">
                       <option value="all">All</option>
                       <option value="installed">Installed</option>
                       <option value="not_installed">Not installed</option>
@@ -39,7 +38,7 @@
                 <div class="col-md-2 pull-right">
                   <div class="checkbox">
                     <label>
-                      <input id="show_only_official" type="checkbox" checked data-show-official-url="{{ url_for('plugin.PluginView:show_only_official') }}"></input>
+                      <input id="show_only_official" type="checkbox" checked></input>
                       Show only official
                     </label>
                   </div>
@@ -59,7 +58,11 @@
                     <input style="width:65%" id="git-url-to-install" class="form-control" placeholder="GIT url" type="text"></input>
                     <input style="width:35%" id="git-branch-tag" class="form-control" placeholder="Branch or tag (optional)" type="text"></input>
                       <span class="input-group-btn">
-                        <button type="button" data-git-install data-install-url="{{ url_for('plugin.PluginView:install_plugin') }}" class="ladda-button btn btn-primary btn-flat" data-style="slide-left">
+                        <button type="button"
+                          class="ladda-button btn btn-primary btn-flat btn-git-install-plugin"
+                          data-install-url="{{ url_for('plugin.PluginView:install_plugin') }}"
+                          data-style="slide-left"
+                        >
                           <span class="ladda-label">Install</span>
                         </button>
                       </span>
@@ -80,9 +83,7 @@
   <script src="{{ url_for('.static', filename='js/ladda.min.js') }}"></script>
   <script src="{{ url_for('.static', filename='js/plugin.js') }}"></script>
   <script>
-    var list_url = "{{ url_for('plugin.PluginView:list_plugin') }}";
     connect("{{ current_user.get_id() }}");
-    call_ajax_plugin(list_url, callback_list, '', 'GET');
   </script>
 {% endblock %}
 

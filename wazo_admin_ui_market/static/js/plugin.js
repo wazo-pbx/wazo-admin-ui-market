@@ -92,22 +92,21 @@ $(document).on('click', ".btn-install-plugin", function() {
   install_plugin.call(this, install_url, body);
 });
 
-$(document).on('click', "[data-git-install]", function() {
-    url = $('#git-url-to-install').val();
-    branch = $('#git-branch-tag').val();
-    options = {};
+$(document).on('click', ".btn-git-install-plugin", function() {
+  let url = $('#git-url-to-install').val();
+  let branch = $('#git-branch-tag').val();
+  let options = ((branch) ? {ref: branch} : {});
 
-    if (url) {
-      if (branch) { options = {ref: branch}; }
-      body = {
-        url: url,
-        method: 'git',
-        options: options
-      }
-
-      install_url = $(this).attr("data-install-url");
-      install_plugin(install_url, body, from_git=true);
+  if (url) {
+    let body = {
+      url: url,
+      method: 'git',
+      options: options
     }
+
+    install_url = $(this).attr("data-install-url");
+    install_plugin(install_url, body, from_git=true);
+  }
 });
 
 $('#search_plugin').on('change', function() {

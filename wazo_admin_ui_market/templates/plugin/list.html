@@ -58,7 +58,11 @@
                     <input style="width:65%" id="git-url-to-install" class="form-control" placeholder="GIT url" type="text"></input>
                     <input style="width:35%" id="git-branch-tag" class="form-control" placeholder="Branch or tag (optional)" type="text"></input>
                       <span class="input-group-btn">
-                        <button type="button" data-git-install data-install-url="{{ url_for('plugin.PluginView:install_plugin') }}" class="ladda-button btn btn-primary btn-flat" data-style="slide-left">
+                        <button type="button"
+                          class="ladda-button btn btn-primary btn-flat btn-git-install-plugin"
+                          data-install-url="{{ url_for('plugin.PluginView:install_plugin') }}"
+                          data-style="slide-left"
+                        >
                           <span class="ladda-label">Install</span>
                         </button>
                       </span>

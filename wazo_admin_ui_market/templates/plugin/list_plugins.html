@@ -5,7 +5,7 @@
         <h3>{{ entry.display_name }}</h3>
         <p>By {{ entry.author }}</p>
         {{ _render_tags(entry.tags) }}
-        {{ _render_button(entry.is_installed|default(False),
+        {{ _render_button(entry.installed_version|default(None),
                           entry.name,
                           entry.url,
                           entry.namespace,

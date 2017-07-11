@@ -23,5 +23,5 @@ class PluginService(object):
     def list(self):
         return plugind.plugins.list()
 
-    def market(self, search=None):
-        return plugind.market.list(search)
+    def market(self, search=None, **kwargs):
+        return plugind.market.list(search, **kwargs)

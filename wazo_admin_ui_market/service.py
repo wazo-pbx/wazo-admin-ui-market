@@ -19,8 +19,20 @@ class PluginService(object):
         if 'namespace' in plugin and 'name' in plugin:
             return plugind.plugins.uninstall(plugin['namespace'], plugin['name'])
 
-    def list(self):
-        return plugind.plugins.list()
+    def list(self, search, namespace, installed):
+        if installed is False:
+            return {'items': []}
+
+        results = []
+        for plugin in plugind.plugins.list()['items']:
+            plugin['installed_version'] = plugin['version']
+            if namespace and namespace != plugin['namespace']:
+                continue
+            if search and search not in plugin.values():
+                continue
+            results.append(plugin)
+
+        return {'items': results}
 
     def market(self, search=None, **kwargs):
         return plugind.market.list(search, **kwargs)

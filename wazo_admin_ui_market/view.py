@@ -37,5 +37,16 @@ class PluginView(LoginRequiredView):
         search = payload.get('search')
         namespace = payload.get('namespace')
         installed = payload.get('installed')
-        results = self.service.market(search=search, namespace=namespace, installed=installed)['items']
+        available_plugins = self.service.market(search=search, namespace=namespace, installed=installed)['items']
+        installed_plugins = self.service.list(search=search, namespace=namespace, installed=installed)['items']
+        results = self._merge_plugins(available_plugins, installed_plugins)
         return render_template('plugin/list_plugins.html', market=results)
+
+    def _merge_plugins(self, available_plugins, installed_plugins):
+        for available in available_plugins:
+            for installed in installed_plugins:
+                if available.get('namespace') == installed.get('namespace') and \
+                   available.get('name') == installed.get('name'):
+                    installed_plugins.remove(installed)
+
+        return available_plugins + installed_plugins

@@ -8,7 +8,7 @@
         {% if entry.installed_version %}
           {{ _render_remove_button(entry.namespace, entry.name) }}
         {% else %}
-          {{ _render_install_button(entry.namespace, entry.name, entry.version) }}
+          {{ _render_install_button(entry.namespace, entry.name) }}
         {% endif %}
       </div>
       <div class="icon">
@@ -48,12 +48,11 @@
   </button>
 {% endmacro %}
 
-{% macro _render_install_button(namespace, name, version) %}
+{% macro _render_install_button(namespace, name) %}
   <button type="button" class="btn btn-default btn-xs margin label btn-install-plugin"
     style="z-index:1;position:relative;"
     data-namespace="{{ namespace }}"
     data-name="{{ name }}"
-    data-version="{{ version }}"
     data-install-url="{{ url_for('plugin.PluginView:install_plugin') }}"
   >
     Install

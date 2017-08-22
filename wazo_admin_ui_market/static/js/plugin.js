@@ -79,14 +79,12 @@ $(document).on('click', ".btn-remove-plugin", function() {
 $(document).on('click', ".btn-install-plugin", function() {
   let namespace = $(this).attr("data-namespace");
   let name = $(this).attr("data-name");
-  let version = $(this).attr("version");
 
   let body = {
     method: 'market',
     options: {
       namespace: namespace,
       name: name,
-      version: version,
     },
   }
 

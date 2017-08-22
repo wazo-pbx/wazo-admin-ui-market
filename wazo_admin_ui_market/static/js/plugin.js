@@ -92,6 +92,24 @@ $(document).on('click', ".btn-install-plugin", function() {
   install_plugin.call(this, install_url, body);
 });
 
+$(document).on('click', ".btn-upgrade-plugin", function() {
+  let namespace = $(this).attr("data-namespace");
+  let name = $(this).attr("data-name");
+  let version = $(this).attr("data-version");
+
+  let body = {
+    method: 'market',
+    options: {
+      namespace: namespace,
+      name: name,
+      version: version,
+    },
+  }
+
+  let upgrade_url = $(this).attr("data-upgrade-url");
+  install_plugin.call(this, upgrade_url, body);
+});
+
 $(document).on('click', ".btn-git-install-plugin", function() {
   let url = $('#git-url-to-install').val();
   let branch = $('#git-branch-tag').val();

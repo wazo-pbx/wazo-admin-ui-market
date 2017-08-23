@@ -9,11 +9,8 @@
         {% if entry.installed_version %}
           {{ _render_remove_button(entry.namespace, entry.name) }}
 
-          {% set break = false %}
-          {% for version in entry.versions if version.upgradable and not break %}
-            {{ _render_upgrade_button(entry.namespace, entry.name, version.version) }}
-            {% set break = true %}
-          {% endfor %}
+          {% set version = entry.versions|selectattr('upgradable')|first %}
+          {{ _render_upgrade_button(entry.namespace, entry.name, version.version) if version}}
         {% else %}
           {{ _render_install_button(entry.namespace, entry.name) }}
         {% endif %}

@@ -4,8 +4,10 @@
 from flask import render_template
 from flask import request
 from flask import jsonify
+from flask import flash
 from flask_menu.classy import classy_menu_item
 from flask_classful import route
+from requests.exceptions import HTTPError
 
 from wazo_admin_ui.helpers.classful import LoginRequiredView
 
@@ -34,10 +36,14 @@ class PluginView(LoginRequiredView):
         search = payload.get('search')
         namespace = payload.get('namespace')
         installed = payload.get('installed')
-        available_plugins = self.service.market(search=search, namespace=namespace, installed=installed)['items']
-        installed_plugins = self.service.list(search=search, namespace=namespace, installed=installed)['items']
-        results = self._merge_plugins(available_plugins, installed_plugins)
-        return render_template('plugin/list_plugins.html', market=results)
+        try:
+            available_plugins = self.service.market(search=search, namespace=namespace, installed=installed)['items']
+            installed_plugins = self.service.list(search=search, namespace=namespace, installed=installed)['items']
+            results = self._merge_plugins(available_plugins, installed_plugins)
+            return render_template('plugin/list_plugins.html', market=results)
+        except HTTPError as error:
+            flash(error, category='error')
+            return render_template('flashed_messages.html')
 
     def _merge_plugins(self, available_plugins, installed_plugins):
         for available in available_plugins:

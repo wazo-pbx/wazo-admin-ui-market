@@ -1,66 +1,66 @@
-var socket = null;
-var started = false;
-var btn_loading = null;
+let socket = null;
+let started = false;
+let btn_loading = null;
 
 $(document).ready(function() {
-    btn_loading = Ladda.create(document.querySelector('.ladda-button'));
-    search_plugins();
+  btn_loading = Ladda.create(document.querySelector('.ladda-button'));
+  search_plugins();
 });
 
 function connect(token) {
-    if (socket != null) {
-        console.log("socket already connected");
-        return;
+  if (socket != null) {
+    console.log("socket already connected");
+    return;
+  }
+
+  let host = window.location.host;
+  let ws_url = "wss://" + host + "/api/websocketd/?token=" + token;
+  socket = new WebSocket(ws_url);
+  socket.onclose = function(event) {
+    socket = null;
+    console.log("websocketd closed with code " + event.code + " and reason '" + event.reason + "'");
+  };
+  socket.onmessage = function(event) {
+    if (started) {
+      let payload = JSON.parse(event.data);
+      if (payload.data.status == 'completed') {
+        console.log('Time to reload webi');
+        location.reload();
+      }
+      return;
     }
 
-    var host = window.location.host;
-    var ws_url = "wss://" + host + "/api/websocketd/?token=" + token;
-    socket = new WebSocket(ws_url);
-    socket.onclose = function(event) {
-        socket = null;
-        console.log("websocketd closed with code " + event.code + " and reason '" + event.reason + "'");
-    };
-    socket.onmessage = function(event) {
-        if (started) {
-            var payload = JSON.parse(event.data);
-            if (payload.data.status == 'completed') {
-                console.log('Time to reload webi');
-                location.reload();
-            }
-            return;
-        }
-
-        var msg = JSON.parse(event.data);
-        switch (msg.op) {
-            case "init":
-                subscribe("plugin_install_progress");
-                subscribe("plugin_uninstall_progress");
-                start();
-                break;
-            case "start":
-                started = true;
-                console.log("waiting for messages");
-                break;
-        }
-    };
-    started = false;
+    let msg = JSON.parse(event.data);
+    switch (msg.op) {
+      case "init":
+        subscribe("plugin_install_progress");
+        subscribe("plugin_uninstall_progress");
+        start();
+        break;
+      case "start":
+        started = true;
+        console.log("waiting for messages");
+        break;
+    }
+  };
+  started = false;
 }
 
 function subscribe(event_name) {
-    var msg = {
-        op: "subscribe",
-        data: {
-          event_name: event_name
-        }
-    };
-    socket.send(JSON.stringify(msg));
-};
+  let msg = {
+    op: "subscribe",
+    data: {
+      event_name: event_name
+    }
+  };
+  socket.send(JSON.stringify(msg));
+}
 
 function start() {
-    var msg = {
-        op: "start"
-    };
-    socket.send(JSON.stringify(msg));
+  let msg = {
+    op: "start"
+  };
+  socket.send(JSON.stringify(msg));
 }
 
 $(document).on('click', ".btn-remove-plugin", function() {
@@ -70,7 +70,7 @@ $(document).on('click', ".btn-remove-plugin", function() {
   let body = {
     namespace: namespace,
     name: name,
-  }
+  };
 
   let remove_url = $(this).attr("data-remove-url");
   remove_plugin.call(this, remove_url, body);
@@ -86,7 +86,7 @@ $(document).on('click', ".btn-install-plugin", function() {
       namespace: namespace,
       name: name,
     },
-  }
+  };
 
   let install_url = $(this).attr("data-install-url");
   install_plugin.call(this, install_url, body);
@@ -104,7 +104,7 @@ $(document).on('click', ".btn-upgrade-plugin", function() {
       name: name,
       version: version,
     },
-  }
+  };
 
   let upgrade_url = $(this).attr("data-upgrade-url");
   install_plugin.call(this, upgrade_url, body);
@@ -120,10 +120,10 @@ $(document).on('click', ".btn-git-install-plugin", function() {
       url: url,
       method: 'git',
       options: options
-    }
+    };
 
     install_url = $(this).attr("data-install-url");
-    install_plugin(install_url, body, from_git=true);
+    install_plugin(install_url, body, from_git = true);
   }
 });
 
@@ -145,7 +145,7 @@ function search_plugins() {
   let installed = $('#installed_plugin').val();
   let search_url = $('#search_plugin').attr("data-search-url");
 
-  let body = {}
+  let body = {};
   if (term) {
     body.search = term;
   }
@@ -164,13 +164,13 @@ function search_plugins() {
 }
 
 function remove_plugin(remove_url, body) {
-  res = confirm('Are you sure you want to remove this plugin?');
+  let res = confirm('Are you sure you want to remove this plugin?');
   if (res == true) {
     launch_remove_plugin.call(this, remove_url, body);
   }
 }
 
-function install_plugin(install_url, body, from_git=false) {
+function install_plugin(install_url, body, from_git = false) {
   res = confirm('Are you sure you want to install this plugin?');
   if (res == true) {
     if (from_git) {

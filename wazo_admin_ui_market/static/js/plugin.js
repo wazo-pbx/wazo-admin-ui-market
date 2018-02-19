@@ -1,66 +1,18 @@
-let socket = null;
-let started = false;
 let btn_loading = null;
 
 $(document).ready(function() {
   btn_loading = Ladda.create(document.querySelector('.ladda-button'));
   search_plugins();
+
+  event_subscriber_callback('plugin_install_progress', 'plugin_listener');
+  event_subscriber_callback('plugin_uninstall_progress', 'plugin_listener');
 });
 
-function connect(token) {
-  if (socket != null) {
-    console.log("socket already connected");
-    return;
+function plugin_listener(payload) {
+  if (payload.data.status == 'completed') {
+    console.log('Time to reload webi');
+    location.reload();
   }
-
-  let host = window.location.host;
-  let ws_url = "wss://" + host + "/api/websocketd/?token=" + token;
-  socket = new WebSocket(ws_url);
-  socket.onclose = function(event) {
-    socket = null;
-    console.log("websocketd closed with code " + event.code + " and reason '" + event.reason + "'");
-  };
-  socket.onmessage = function(event) {
-    if (started) {
-      let payload = JSON.parse(event.data);
-      if (payload.data.status == 'completed') {
-        console.log('Time to reload webi');
-        location.reload();
-      }
-      return;
-    }
-
-    let msg = JSON.parse(event.data);
-    switch (msg.op) {
-      case "init":
-        subscribe("plugin_install_progress");
-        subscribe("plugin_uninstall_progress");
-        start();
-        break;
-      case "start":
-        started = true;
-        console.log("waiting for messages");
-        break;
-    }
-  };
-  started = false;
-}
-
-function subscribe(event_name) {
-  let msg = {
-    op: "subscribe",
-    data: {
-      event_name: event_name
-    }
-  };
-  socket.send(JSON.stringify(msg));
-}
-
-function start() {
-  let msg = {
-    op: "start"
-  };
-  socket.send(JSON.stringify(msg));
 }
 
 $(document).on('click', ".btn-remove-plugin", function() {

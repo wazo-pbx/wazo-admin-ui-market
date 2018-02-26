@@ -1,10 +1,11 @@
-# Copyright 2017 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2017-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 from flask import render_template
 from flask import request
 from flask import jsonify
 from flask import flash
+from flask_babel import lazy_gettext as l_
 from flask_menu.classy import classy_menu_item
 from flask_classful import route
 from requests.exceptions import HTTPError
@@ -14,7 +15,7 @@ from wazo_admin_ui.helpers.classful import LoginRequiredView
 
 class PluginView(LoginRequiredView):
 
-    @classy_menu_item('.plugins', 'Plugins', order=0, icon="cubes")
+    @classy_menu_item('.plugins', l_('Plugins'), order=0, icon="cubes")
     def index(self):
         return render_template('plugin/list.html')
 

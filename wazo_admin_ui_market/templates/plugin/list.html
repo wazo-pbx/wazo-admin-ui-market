@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block content_header %}
-  {{ build_breadcrumb('Plugins', '', 'cubes', ['List']) }}
+  {{ build_breadcrumb(_('Plugins'), '', 'cubes', [_('List')]) }}
 {% endblock %}
 
 {% block content %}
@@ -10,8 +10,8 @@
       <div class="col-md-12">
         <div class="nav-tabs-custom">
           <ul class="nav nav-tabs">
-            <li class="active"><a href="#market" data-toggle="tab">Market</a></li>
-            <li><a href="#git" data-toggle="tab">Git</a></li>
+            <li class="active"><a href="#market" data-toggle="tab">{{ _('Market') }}</a></li>
+            <li><a href="#git" data-toggle="tab">{{ _('Git') }}</a></li>
           </ul>
           <div class="tab-content">
 
@@ -29,9 +29,9 @@
                 <div class="col-md-2 pull-right">
                   <div class="form-group">
                     <select class="form-control" id="installed_plugin">
-                      <option value="all">All</option>
-                      <option value="installed">Installed</option>
-                      <option value="not_installed">Not installed</option>
+                      <option value="all">{{ _('All') }}</option>
+                      <option value="installed">{{ _('Installed') }}</option>
+                      <option value="not_installed">{{ _('Not installed') }}</option>
                     </select>
                   </div>
                 </div>
@@ -63,7 +63,7 @@
                           data-install-url="{{ url_for('plugin.PluginView:install_plugin') }}"
                           data-style="slide-left"
                         >
-                          <span class="ladda-label">Install</span>
+                          <span class="ladda-label">{{ _('Install') }}</span>
                         </button>
                       </span>
                   </div>

@@ -1,0 +1,8 @@
+[main]
+host = https://www.transifex.com
+
+[wazo.wazo-admin-ui-market]
+file_filter = wazo_admin_ui_market/translations/<lang>/LC_MESSAGES/messages.po
+source_file = wazo_admin_ui_market/translations/messages.pot
+source_lang = en
+type = PO

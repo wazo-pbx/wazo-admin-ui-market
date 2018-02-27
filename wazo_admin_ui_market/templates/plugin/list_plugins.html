@@ -3,8 +3,8 @@
     <div class="small-box bg-{{ entry.color|default('green') }} box box-solid">
       <div class="inner">
         <h3>{{ entry.display_name }}</h3>
-        <p>By {{ entry.author }}</p>
-        <p>Version {{ entry.installed_version or (entry.versions[0]['version'] if entry.versions) }}</p>
+        <p>{{ _('By') }} {{ entry.author }}</p>
+        <p>{{ _('Version') }} {{ entry.installed_version or (entry.versions[0]['version'] if entry.versions) }}</p>
         {{ _render_tags(entry.tags) }}
         {% if entry.installed_version %}
           {{ _render_remove_button(entry.namespace, entry.name) }}
@@ -20,7 +20,7 @@
         <i class="fa fa-{{ entry.icon|default('gears') }}"></i>
       </div>
       <a href="{{ entry.homepage or '#' }}" class="small-box-footer" target="_blank">
-        More info <i class="fa fa-arrow-circle-right"></i>
+        {{ _('More info') }} <i class="fa fa-arrow-circle-right"></i>
       </a>
       <div class="overlay {% if not entry.on_installation %}hidden{% endif %}">
         <i class="fa fa-refresh fa-spin"></i>
@@ -48,7 +48,7 @@
     data-name="{{ name }}"
     data-remove-url="{{ url_for('plugin.PluginView:remove_plugin') }}"
   >
-    Remove
+    {{ _('Remove') }}
     <i class="fa fa-trash"></i>
   </button>
 {% endmacro %}
@@ -60,7 +60,7 @@
     data-name="{{ name }}"
     data-install-url="{{ url_for('plugin.PluginView:install_plugin') }}"
   >
-    Install
+    {{ _('Install') }}
     <i class="fa fa-download"></i>
   </button>
 {% endmacro %}
@@ -73,7 +73,7 @@
     data-version="{{ version }}"
     data-upgrade-url="{{ url_for('plugin.PluginView:install_plugin') }}"
   >
-    Upgrade ({{ version }})
+    {{ _('Upgrade') }} ({{ version }})
     <i class="fa fa-download"></i>
   </button>
 {% endmacro %}
